@@ -44,12 +44,12 @@ services:
     # VOLUMES:
     volumes:
       # The location of your home directory.
-      - ../../.containers/Steam-Headless/home:/home/default/:rw
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Steam-Headless/home:/home/default/:rw
 
       # The location where all games should be installed.
       # This path needs to be set as a library path in Steam after logging in.
       # Otherwise, Steam will store games in the home directory above.
-      - ../../.containers/Steam-Headless/mnt/games/:/mnt/games/:rw
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Steam-Headless/mnt/games/:/mnt/games/:rw
 
       # The Xorg socket. This will be shared with other containers so they can access the X server.
       # Select only one option or leave commented out to not share the Xorg socket with any other Docker containers.

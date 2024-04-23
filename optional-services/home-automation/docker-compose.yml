@@ -16,7 +16,7 @@ services:
       - TZ=${TIMEZONE}
     privileged: true
     volumes:
-      - ../../.containers/HomeAssistant:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/HomeAssistant:/config
     ports:
       - ${HOME_ASSISTANT_HOST_PORT}:8123 #optional
     # devices: # use if you have a usb dongle for zwave/zigbee/matter or a harddrive or something
@@ -47,7 +47,7 @@ services:
       # Instead, use the /dev/serial/by-id/X serial device for your Z-Wave stick.
       - "${ZWAVE_STICK_DEVICE_PATH}:/dev/zwave"
     volumes:
-      - ../../.containers/ZWaveJS2MQTT:/usr/src/app/store
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/ZWaveJS2MQTT:/usr/src/app/store
     ports:
       - "${ZWAVE_JS_UI_HOST_PORT}:8091" # port for web interface
       - "${ZWAVE_JS_WS_HOST_PORT}:3000" # port for Z-Wave JS websocket server
@@ -56,7 +56,7 @@ services:
     image: koenkk/zigbee2mqtt
     restart: unless-stopped
     volumes:
-      - ../../.containers/Zigbee2MQTT:/app/data
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Zigbee2MQTT:/app/data
       - /run/udev:/run/udev:ro
     ports:
       # Frontend port
