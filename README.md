@@ -21,7 +21,7 @@ This is using Github Actions to build on each push to this repo. I am executing 
 
 # Documentation
 
-- [Docs Site](https://Homemediadocker.github.io/Home-Media-Docker/docs/intro) has moved to a dedicated page - Docusaurus and searchable.
+- [Docs Site](https://Homemediadocker.github.io/Home-Media-Docker/) has moved to a dedicated page - Docusaurus and searchable.
 
 ## OTHER NOTES
 
