@@ -28,5 +28,5 @@ This is using Github Actions to build on each push to this repo. I am executing 
 - The system data will be placed in this project directory by default if you change nothing
 - Data is placed in `./.containers/` via the `DEFAULT_CONTAINER_DATA_LOCATION` environment variable by default -- this directory is in the `.gitignore` already in the event you decide to use that location.
 - Helper scripts can be found in [`./scripts`](./scripts)
-- This original script was setup on a Macbook and runs flawlessly on MacOS and Linux (tested). My homelab uses Ubuntu 22.04 and docker (latest) and my Macbook is on MacOS Sonoma (latest).
+- This original script was setup on a Macbook and runs flawlessly on MacOS and Linux (tested). My homelab uses Ubuntu 22.04 and docker (latest) and an Apple Silicon Macbook that is on MacOS Sonoma (latest).
   - Additional configuration may be needed on the volumes in each service (container) section to setup for your machine (if you refer to different paths for an existing data folder and not a fresh install).
