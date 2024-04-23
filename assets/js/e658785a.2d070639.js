@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocker_docs=self.webpackChunkdocker_docs||[]).push([[614],{6073:e=>{e.exports=JSON.parse('{"label":"facebook","permalink":"/Home-Media-Docker/blog/tags/facebook","allTagsPath":"/Home-Media-Docker/blog/tags","count":1,"unlisted":false}')}}]);

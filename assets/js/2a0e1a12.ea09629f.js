@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocker_docs=self.webpackChunkdocker_docs||[]).push([[1486],{9482:e=>{e.exports=JSON.parse('{"label":"docusaurus","permalink":"/Home-Media-Docker/blog/tags/docusaurus","allTagsPath":"/Home-Media-Docker/blog/tags","count":4,"unlisted":false}')}}]);
