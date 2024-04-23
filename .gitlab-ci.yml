@@ -1,0 +1,57 @@
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Docker.gitlab-ci.yml
+
+# Build a Docker image with CI/CD and push to the GitLab registry.
+# Docker-in-Docker documentation: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+#
+# This template uses one generic job with conditional builds
+# for the default branch and all other (MR) branches.
+
+docker-build:
+  # Use the official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:24.0.7-dind
+  variables:
+    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  # All branches are tagged with $DOCKER_IMAGE_NAME (defaults to commit ref slug)
+  # Default branch is also tagged with `latest`
+  script:
+    - cp .env-example .env
+    - echo "####################################################################################################"
+    - echo "#############################Spinning Up Without a media Server#####################################"
+    - echo "####################################################################################################"
+    - docker compose up -d
+    - echo "####################################################################################################"
+    - echo "#############################Spinning Up WITH a media Server (Jellyfin)#############################"
+    - echo "####################################################################################################"
+    - docker compose --profile jellyfin up -d
+    - echo "####################################################################################################"
+    - echo "############################# Stopping all Containers###############################################"
+    - echo "####################################################################################################"
+    - docker stop $(docker ps -a --filter "name=vpn" -q) jellyfin portainer komga sonarr radarr prowlarr jellyseerr transmission duplicati
+    - echo "####################################################################################################"
+    - echo "############################# Removing all Containers###############################################"
+    - echo "####################################################################################################"
+    - docker rm $(docker ps -a --filter "name=vpn" -q) jellyfin portainer komga sonarr radarr prowlarr jellyseerr transmission duplicati
+    - echo "####################################################################################################"
+    - echo "############################# Removing all Images###################################################"
+    - echo "####################################################################################################"
+    - docker rmi $(docker images -q)
+    - exit 0
+    # - docker push "$DOCKER_IMAGE_NAME"
+    # - |
+    #   if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+    #     docker tag "$DOCKER_IMAGE_NAME" "$CI_REGISTRY_IMAGE:latest"
+    #     docker push "$CI_REGISTRY_IMAGE:latest"
+    #   fi
+  # Run this job in a branch where a Dockerfile exists
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      exists:
+        - docker-compose.yml
