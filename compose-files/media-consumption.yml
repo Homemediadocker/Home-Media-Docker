@@ -12,14 +12,14 @@ services:
       # - NVIDIA_VISIBLE_DEVICES=all
       # - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Emby:/config # Configuration directory
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Emby:/config # Configuration directory
       # - ./images/logowhite.png:/app/emby/system/dashboard-ui/modules/logoscreensaver/logowhite.png ## Uncomment and create your own logo in the image directory to customize your server
       # - ./images/logowhite.png:/app/emby/system/dashboard-ui/modules/themes/logowhite.png ## Uncomment and create your own logo in the image directory to customize your server
       # - ./images/logodark.png:/app/emby/system/dashboard-ui/modules/themes/logodark.png ## Uncomment and create your own logo in the image directory to customize your server
       - ${LOCAL_TV_PATH}:/media/Synology/Television # Media directory
       - ${LOCAL_MOVIES_PATH}:/media/Synology/Movies # Media directory
       - ${LOCAL_BACKUPS_PATH}:/media/Synology/Backups #Backups Directory
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl # Add SSL Certs to this directory
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl # Add SSL Certs to this directory
     ports:
       - ${EMBY_HOST_PORT}:8096 #http port
       - ${EMBY_HOST_PORT_SSL}:8920 #ssl port
@@ -51,10 +51,10 @@ services:
       - TZ=${TIMEZONE}
       # - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyfin:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyfin:/config
       - ${LOCAL_TV_PATH}:/media/Synology/Television # Media directory
       - ${LOCAL_MOVIES_PATH}:/media/Synology/Movies # Media directory
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl # Add SSL Certs to this directory
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl # Add SSL Certs to this directory
     ports:
       - ${JELLYFIN_HOST_PORT}:8096
       - ${JELLYFIN_HOST_PORT_SSL}:8920 #optional
@@ -76,7 +76,7 @@ services:
     ports:
       - ${PLEX_HOST_PORT}:32400
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Plex:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Plex:/config
       - ${LOCAL_TV_PATH}:/tv
       - ${LOCAL_MOVIES_PATH}:/movies
     restart: unless-stopped
@@ -87,7 +87,7 @@ services:
     image: gotson/komga:latest
     container_name: komga
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Komga/config:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Komga/config:/config
       - ${LOCAL_BOOKS_PATH}:/data
     ports:
       - ${KOMGA_HOST_PORT}:25600

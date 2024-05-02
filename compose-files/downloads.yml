@@ -16,7 +16,7 @@ services:
       - PEERPORT=${TRANSMISSION_PEERPORT} #optional
       - HOST_WHITELIST=${TRANSMISSION_HOST_WHITELIST} #optional
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Transmission:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Transmission:/config
       - ${LOCAL_DOWNLOADS_PATH}:/downloads
     # ports: ### Ports are not allowed when network_mode: is service:vpn
     #   - 9091:9091 # webui

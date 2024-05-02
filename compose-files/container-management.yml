@@ -7,7 +7,7 @@ services:
       - ${PORTAINER_HOST_PORT}:9000 # webui for portainer (http)
       - ${PORTAINER_HOST_PORT_SSL}:9443 # webui for portainer (https)
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Portainer:/data
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl
     restart: unless-stopped

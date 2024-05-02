@@ -10,7 +10,7 @@ services:
     ports:
       - ${JELLYSEERR_HOST_PORT}:5055
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyseerr:/app/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyseerr:/app/config
     restart: unless-stopped
 
   ############ Media PVR Management ############
@@ -22,7 +22,7 @@ services:
       - PGID=${GID}
       - TZ=${TIMEZONE}
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Sonarr:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Sonarr:/config
       - ${LOCAL_TV_PATH}:/tv # optional but needed to map external data
       - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
     ports:
@@ -42,7 +42,7 @@ services:
       - PGID=${GID}
       - TZ=${TIMEZONE}
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Radarr:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Radarr:/config
       - ${LOCAL_MOVIES_PATH}:/movies # optional but needed to map external data
       - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
     ports:
@@ -61,7 +61,7 @@ services:
       - PGID=${GID}
       - TZ=${TIMEZONE}
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Prowlarr:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Prowlarr:/config
     ports:
       - ${PROWLARR_HOST_PORT}:9696
     restart: unless-stopped
@@ -78,7 +78,7 @@ services:
       - AUTO_UPDATE=${JACKETT_AUTO_UPDATE} #optional
       - RUN_OPTS=${JACKETT_RUN_OPTS} #optional
     volumes:
-      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Jackett:/config
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jackett:/config
       - ${LOCAL_DOWNLOADS_PATH}:/downloads
     ports:
       - ${JACKETT_HOST_PORT}:9117
