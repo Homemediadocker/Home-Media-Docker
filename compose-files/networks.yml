@@ -1,0 +1,5 @@
+networks:
+  default:
+    driver: bridge
+    name: home-media-docker_default
+  zwave:

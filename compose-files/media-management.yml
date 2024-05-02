@@ -1,0 +1,87 @@
+services:
+  ### For managing server content requests
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=${JELLYSEER_LOG_LEVEL}
+      - TZ=${TIMEZONE}
+      - JELLYFIN_TYPE=${JELLYSEER_TYPE} # if using emby
+    ports:
+      - ${JELLYSEERR_HOST_PORT}:5055
+    volumes:
+      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyseerr:/app/config
+    restart: unless-stopped
+
+  ############ Media PVR Management ############
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Sonarr:/config
+      - ${LOCAL_TV_PATH}:/tv # optional but needed to map external data
+      - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
+    ports:
+      - ${SONARR_HOST_PORT}:8989
+      - ${SONARR_HOST_PORT_SSL}:9898 # ssl port if you enable it
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+    networks:
+      - default
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Radarr:/config
+      - ${LOCAL_MOVIES_PATH}:/movies # optional but needed to map external data
+      - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
+    ports:
+      - ${RADARR_HOST_PORT}:7878
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+    networks:
+      - default
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Prowlarr:/config
+    ports:
+      - ${PROWLARR_HOST_PORT}:9696
+    restart: unless-stopped
+    networks:
+      - default
+
+  jackett: # This is an option if Prowlarr doesn't work correctly
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+      - AUTO_UPDATE=${JACKETT_AUTO_UPDATE} #optional
+      - RUN_OPTS=${JACKETT_RUN_OPTS} #optional
+    volumes:
+      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Jackett:/config
+      - ${LOCAL_DOWNLOADS_PATH}:/downloads
+    ports:
+      - ${JACKETT_HOST_PORT}:9117
+    restart: unless-stopped
+    profiles:
+      - jackett

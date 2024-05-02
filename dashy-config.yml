@@ -27,13 +27,20 @@ sections:
         target: newtab
         statusCheck: true
         id: 0_1962_docs
+      - title: Bookstack
+        description: Confluence Alternative for documentation
+        icon: hl-bookstack
+        url: http://localhost:6875
+        target: newtab
+        statusCheck: true
+        id: 1_1962_bookstack
       - title: Hover Me
         description: >-
           Edit the Service URLs in these cards to adjust them once you move into
           a non local environment.  All URLs are configured for localhost out of
           the box
         displayData: Status checks will not work with localhost
-        id: 1_1962_hoverme
+        id: 2_1962_hoverme
   - name: Content Servers
     displayData:
       sortBy: default
@@ -45,7 +52,7 @@ sections:
       - title: Emby
         description: Media Server
         icon: hl-emby
-        url: http://127.0.0.1:8096/
+        url: http://localhost:8096/
         target: newtab
         hotkey: 1
         statusCheck: true
@@ -54,7 +61,7 @@ sections:
       - title: Jellyfin
         description: Media Server
         icon: hl-jellyfin
-        url: http://127.0.0.1:8096/
+        url: http://localhost:8096/
         target: newtab
         statusCheck: true
         id: 1_1509_jellyfin
@@ -68,7 +75,7 @@ sections:
       - title: Komga
         description: Comic book/Manga server
         icon: hl-komga
-        url: http://127.0.0.1:8341/
+        url: http://localhost:8341/
         target: newtab
         statusCheck: true
         id: 3_1509_komga
@@ -84,7 +91,7 @@ sections:
       - title: Sonarr
         description: TV Show Grabber
         icon: hl-sonarr
-        url: http://127.0.0.1:8989/
+        url: http://localhost:8989/
         target: newtab
         statusCheck: true
         statusCheckAcceptCodes: "401"
@@ -92,7 +99,7 @@ sections:
       - title: Radarr
         description: Movie Grabber
         icon: hl-radarr
-        url: http://127.0.0.1:7878
+        url: http://localhost:7878
         target: newtab
         statusCheck: true
         statusCheckAcceptCodes: "401"
@@ -100,7 +107,7 @@ sections:
       - title: Jellyseerr
         description: Content Request Management
         icon: hl-jellyseerr
-        url: http://127.0.0.1:5055/
+        url: http://localhost:5055/
         target: newtab
         statusCheck: true
         id: 2_808_jellyseerr
@@ -118,7 +125,7 @@ sections:
       - title: Prowlarr
         description: Web Crawler for Torrent Sites
         icon: hl-prowlarr
-        url: http://127.0.0.1:9696/
+        url: http://localhost:9696/
         target: newtab
         statusCheck: true
         id: 0_1153_prowlarr
@@ -134,7 +141,7 @@ sections:
       - title: Transmission
         description: Torrent Downloader
         icon: hl-transmission
-        url: http://127.0.0.1:9091/transmission/web/
+        url: http://localhost:9091/transmission/web/
         target: newtab
         statusCheck: true
         statusCheckAcceptCodes: "401"
@@ -152,7 +159,7 @@ sections:
       - title: Portainer
         description: Like a Web Based Docker Desktop
         icon: hl-portainer
-        url: https://127.0.0.1:49443/
+        url: https://localhost:49443/
         target: newtab
         statusCheck: true
         statusCheckAllowInsecure: true
@@ -160,7 +167,7 @@ sections:
       - title: Duplicati
         description: Container data backups
         icon: hl-duplicati
-        url: http://127.0.0.1:8200/login.html
+        url: http://localhost:8200/login.html
         target: newtab
         statusCheck: true
         id: 1_1984_duplicati
@@ -176,7 +183,7 @@ sections:
       - title: PiHole
         description: Ad blocker and dns server
         icon: hl-pihole
-        url: http://127.0.0.1:8880/admin/login.php
+        url: http://localhost:8880/admin/login.php
         target: newtab
         statusCheck: false
         id: 0_396_pihole

@@ -1,0 +1,53 @@
+services:
+  ### NORD VPN WITH WIREGUARD (NordLynx)
+  vpn_old:
+    image: ghcr.io/bubuntux/nordlynx
+    cap_add:
+      - NET_ADMIN #required
+      - NET_RAW # Required
+      - SYS_MODULE
+    security_opt:
+      - no-new-privileges:true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1 # Recommended if using ipv4 only
+    environment:
+      - PRIVATE_KEY=${PRIVATE_KEY}= #required
+      - DNS=${VPN_DNS}
+      - ALLOWED_IPS=${VPN_ALLOWED_IPS}
+      - NET_LOCAL=${VPN_NET_LOCAL}
+      - TZ=${TIMEZONE}
+    ports:
+      - ${TRANSMISSION_HOST_PORT}:9091 # webui for Transmission - it is exposed via the docker service network internally
+      - ${TRANSMISSION_SEED_DISCOVERY_PORT_TCP}:51413 # for seed discovery - greatly improves performance even if not seeding
+      - ${TRANSMISSION_SEED_DISCOVERY_PORT_UDP}:51413/udp
+      - ${DUPLICATI_HOST_PORT}:8200
+    volumes:
+      - /lib/modules:/lib/modules:ro # Required to install wireguard module
+    restart: unless-stopped
+    profiles:
+      - vpn_old
+  vpn:
+    image: ghcr.io/bubuntux/nordvpn
+    cap_add:
+      - NET_ADMIN # Required
+      - NET_RAW # Required
+      - SYS_MODULE
+    environment: # Review https://github.com/bubuntux/nordvpn#environment-variables
+      - TOKEN=${TOKEN} # Required
+      - CONNECT=${NORD_CONNECT_AREA} # if none provided you will connect to the recommended server
+      - DNS=${VPN_DNS}
+      - TZ=${TIMEZONE}
+      - TECHNOLOGY=${NORD_TECHNOLOGY} # NordLynx or OpenVPN - NordLynx is Wireguard and supposedly 3x-5x faster
+      - ALLOWED_IPS=${VPN_ALLOWED_IPS}
+      - NETWORK=${VPN_NET_LOCAL} # So it can be accessed within the local network
+      - NET_LOCAL=${VPN_NET_LOCAL} # So it can be accessed within the local network
+    ports:
+      - ${TRANSMISSION_HOST_PORT}:9091 # webui for Transmission - it is exposed via the docker service network internally
+      - ${TRANSMISSION_SEED_DISCOVERY_PORT_TCP}:51413 # for seed discovery - greatly improves performance even if not seeding
+      - ${TRANSMISSION_SEED_DISCOVERY_PORT_UDP}:51413/udp
+      - ${DUPLICATI_HOST_PORT}:8200
+    volumes:
+      - /lib/modules:/lib/modules:ro # Required to install wireguard module
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1 # Recomended if using ipv4 only
+    restart: unless-stopped

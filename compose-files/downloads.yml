@@ -1,0 +1,30 @@
+services:
+  ############ NEEDS VPN BEFORE USE (OPENVPN or WIREGUARD) ############
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    network_mode: service:vpn
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+      # - TRANSMISSION_WEB_HOME= #optional -- set if you have a custom transmission ui
+      - USER=${TRANSMISSION_USER} #optional
+      - PASS=${TRANSMISSION_PASS} #optional
+      - WHITELIST=${TRANSMISSION_WHITELIST} #optional
+      - PEERPORT=${TRANSMISSION_PEERPORT} #optional
+      - HOST_WHITELIST=${TRANSMISSION_HOST_WHITELIST} #optional
+    volumes:
+      - ../${DEFAULT_CONTAINER_DATA_LOCATION}/Transmission:/config
+      - ${LOCAL_DOWNLOADS_PATH}:/downloads
+    # ports: ### Ports are not allowed when network_mode: is service:vpn
+    #   - 9091:9091 # webui
+    #   - 51413:51413 # for seed discovery - greatly improves performance even if not seeding
+    #   - 51413:51413/udp
+    restart: unless-stopped
+    depends_on:
+      - vpn
+      - prowlarr
+      - sonarr
+      - radarr
