@@ -1,6 +1,7 @@
 services:
   ### NORD VPN WITH WIREGUARD (NordLynx)
   vpn_old:
+    container_name: ${VPN_CONTAINER_NAME}
     image: ghcr.io/bubuntux/nordlynx
     cap_add:
       - NET_ADMIN #required
@@ -27,6 +28,7 @@ services:
     profiles:
       - vpn_old
   vpn:
+    container_name: ${VPN_CONTAINER_NAME}
     image: ghcr.io/bubuntux/nordvpn
     cap_add:
       - NET_ADMIN # Required

@@ -1,7 +1,7 @@
 services:
   heimdall:
     image: lscr.io/linuxserver/heimdall:latest
-    container_name: heimdall
+    container_name: ${HEIMDALL_CONTAINER_NAME}
     environment:
       - PUID=${UID}
       - PGID=${GID}

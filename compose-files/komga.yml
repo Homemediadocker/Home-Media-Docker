@@ -1,7 +1,7 @@
 services:
   komga: ###### NEED TO CONFIGURE LIKE UBUNTU SERVER so no data is lost
     image: gotson/komga:latest
-    container_name: komga
+    container_name: ${KOMGA_CONTAINER_NAME}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Komga/config:/config
       - ${LOCAL_BOOKS_PATH}:/data

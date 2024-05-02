@@ -2,7 +2,7 @@ services:
   ### For managing server content requests
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
-    container_name: jellyseerr
+    container_name: ${JELLYSEERR_CONTAINER_NAME}
     environment:
       - LOG_LEVEL=${JELLYSEER_LOG_LEVEL}
       - TZ=${TIMEZONE}

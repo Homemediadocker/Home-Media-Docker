@@ -4,7 +4,7 @@ services:
   ## NOTE - DON'T RUN EMBY AND JELLYFIN AT THE SAME TIME! THEY WILL HAVE PORT CONFLICTS!
   emby:
     image: lscr.io/linuxserver/emby:latest
-    container_name: emby
+    container_name: ${EMBY_CONTAINER_NAME}
     environment:
       - PUID=${UID}
       - PGID=${GID}

@@ -1,7 +1,7 @@
 services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
+    container_name: ${PROWLARR_CONTAINER_NAME}
     environment:
       - PUID=${UID}
       - PGID=${GID}

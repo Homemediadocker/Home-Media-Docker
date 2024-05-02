@@ -2,7 +2,7 @@ services:
   ############ Media PVR Management - TV SHOWS############
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
+    container_name: ${SONARR_CONTAINER_NAME}
     environment:
       - PUID=${UID}
       - PGID=${GID}

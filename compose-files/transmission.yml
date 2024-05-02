@@ -3,7 +3,7 @@ services:
 
   transmission:
     image: lscr.io/linuxserver/transmission:latest
-    container_name: transmission
+    container_name: ${TRANSMISSION_CONTAINER_NAME}
     network_mode: service:vpn
     environment:
       - PUID=${UID}

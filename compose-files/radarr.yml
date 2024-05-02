@@ -2,7 +2,7 @@ services:
   ############ Media PVR Management - MOVIES ############
   radarr:
     image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
+    container_name: ${RADARR_CONTAINER_NAME}
     environment:
       - PUID=${UID}
       - PGID=${GID}

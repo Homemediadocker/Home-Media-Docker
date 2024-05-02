@@ -1,8 +1,8 @@
 services:
-############# DASHY IS THE GO TO DASHBOARD FOR THIS PROJECT ##################
+  ############# DASHY IS THE GO TO DASHBOARD FOR THIS PROJECT ##################
   dashy:
     image: lissy93/dashy
-    container_name: dashy
+    container_name: ${DASHY_CONTAINER_NAME}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Dashy:/app/user-data
       - ${DASHY_CONFIG_LOCATION}:/app/user-data/conf.yml # starter config for all the stuff in this docker compose

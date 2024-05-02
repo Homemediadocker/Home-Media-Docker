@@ -1,6 +1,6 @@
 services:
   pihole:
-    container_name: pihole
+    container_name: ${PIHOLE_CONTAINER_NAME}
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
