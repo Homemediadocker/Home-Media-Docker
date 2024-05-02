@@ -1,0 +1,26 @@
+services:
+  ################### Home Automation #######################
+  homeassistant:
+    image: lscr.io/linuxserver/homeassistant:latest
+    container_name: ${HOME_ASSISTANT_CONTAINER_NAME}
+    # network_mode: host
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    privileged: true
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/HomeAssistant:/config
+    ports:
+      - ${HOME_ASSISTANT_HOST_PORT}:8123 #optional
+    # devices: # use if you have a usb dongle for zwave/zigbee/matter or a harddrive or something
+    #   - /path/to/device:/path/to/device #optional
+    restart: unless-stopped
+    networks:
+      - zwave
+    # depends_on:
+    #   - zwavejs
+    profiles:
+      - homeAutomation
+      - all
+      - homeassistant

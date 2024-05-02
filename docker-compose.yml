@@ -41,3 +41,8 @@ include:
   ####### DOCKER VOLUMES AND NETWORK CONFIG ########
   - ./compose-files/optional-mounted-volumes.yml
   - ./compose-files/networks.yml
+
+  ######## HOME AUTOMATION CONTAINERS #############
+  - ./compose-files/homeassistant.yml
+  - ./compose-files/zwavejs.yml
+  - ./compose-files/zigbee2mqtt.yml

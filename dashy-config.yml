@@ -187,3 +187,37 @@ sections:
         target: newtab
         statusCheck: false
         id: 0_396_pihole
+  - name: Home Automation
+    icon: hl-home-assistant
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Home Assistant
+        description: Advanced FOSS Solution for automating all the things in your home
+        icon: hl-home-assistant
+        url: http://localhost:8123
+        target: newtab
+        statusCheck: true
+        id: 0_1482_homeassistant
+      - title: ZwaveJS
+        description: >-
+          The Missing UI for ZwaveJS outside of Home Assistant. You must
+          configure a valid USB for this to spin up properly
+        icon: generative
+        url: http://localhost:8091
+        target: newtab
+        statusCheck: true
+        id: 1_1482_zwavejs
+      - title: Zigbee2MQTT
+        description: >-
+          The other missing UI for the zigbee controller in Home Assistant. This
+          also requires a USB stick to be configured to function.
+        icon: hl-zigbee2mqtt
+        url: http://localhost:38080
+        target: newtab
+        statusCheck: true
+        id: 2_1482_zigbeemqtt
