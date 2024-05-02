@@ -1,0 +1,21 @@
+services:
+  komga: ###### NEED TO CONFIGURE LIKE UBUNTU SERVER so no data is lost
+    image: gotson/komga:latest
+    container_name: komga
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Komga/config:/config
+      - ${LOCAL_BOOKS_PATH}:/data
+    ports:
+      - ${KOMGA_HOST_PORT}:25600
+    user: "${UID}:${GID}"
+    # remove the whole environment section if you don't need it
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+      - KOMGA_LIBRARIES_SCAN_STARTUP=${KOMGA_LIBRARIES_SCAN_STARTUP}
+      - KOMGA_REMEMBERME_KEY=${KOMGA_REMEMBERME_KEY}
+      - JAVA_OPTS=${KOMGA_JAVA_OPTS}
+    restart: unless-stopped
+    networks:
+      - default

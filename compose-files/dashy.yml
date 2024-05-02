@@ -1,21 +1,5 @@
 services:
-  ############## DASHBOARDS ##############################
-  heimdall:
-    image: lscr.io/linuxserver/heimdall:latest
-    container_name: heimdall
-    environment:
-      - PUID=${UID}
-      - PGID=${GID}
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Heimdall:/config
-    ports:
-      - ${HEIMDALL_HOST_HTTP_PORT}:80
-      - ${HEIMDALL_HOST_HTTPS_PORT}:443
-    restart: unless-stopped
-    profiles:
-      - "heimdall"
-
+############# DASHY IS THE GO TO DASHBOARD FOR THIS PROJECT ##################
   dashy:
     image: lissy93/dashy
     container_name: dashy

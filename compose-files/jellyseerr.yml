@@ -1,0 +1,14 @@
+services:
+  ### For managing server content requests
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=${JELLYSEER_LOG_LEVEL}
+      - TZ=${TIMEZONE}
+      - JELLYFIN_TYPE=${JELLYSEER_TYPE} # if using emby
+    ports:
+      - ${JELLYSEERR_HOST_PORT}:5055
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyseerr:/app/config
+    restart: unless-stopped

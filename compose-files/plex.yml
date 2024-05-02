@@ -1,0 +1,19 @@
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+      - VERSION=${PLEX_VERSION}
+      - PLEX_CLAIM=${PLEX_CLAIM} #optional
+    ports:
+      - ${PLEX_HOST_PORT}:32400
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Plex:/config
+      - ${LOCAL_TV_PATH}:/tv
+      - ${LOCAL_MOVIES_PATH}:/movies
+    restart: unless-stopped
+    profiles:
+      - plex

@@ -18,6 +18,8 @@ services:
     restart: unless-stopped
     depends_on:
       - ${BOOKSTACK_DB_CONTAINER_NAME}
+    networks:
+      - default
   bookstack_db:
     image: lscr.io/linuxserver/mariadb
     container_name: ${BOOKSTACK_DB_CONTAINER_NAME}

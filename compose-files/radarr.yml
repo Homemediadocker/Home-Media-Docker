@@ -1,0 +1,20 @@
+services:
+  ############ Media PVR Management - MOVIES ############
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Radarr:/config
+      - ${LOCAL_MOVIES_PATH}:/movies # optional but needed to map external data
+      - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
+    ports:
+      - ${RADARR_HOST_PORT}:7878
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+    networks:
+      - default

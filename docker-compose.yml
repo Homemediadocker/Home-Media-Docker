@@ -9,14 +9,35 @@
 
 name: home-media-docker
 include:
+  ####### NETWORK STUFF ########
   - ./compose-files/vpn.yml
-  - ./compose-files/downloads.yml ## Depends on network-pihole -- vpn
-  - ./compose-files/backup-restore.yml ## depends on network-pihol -- vpn
+  - ./compose-files/transmission.yml ## Depends on network-pihole -- vpn
+  - ./compose-files/duplicati.yml ## depends on network-pihol -- vpn
   - ./compose-files/pihole.yml ## depends on network-pihol -- vpn
+
+  ####### NOTES ########
   - ./compose-files/bookstack.yml
-  - ./compose-files/container-management.yml
-  - ./compose-files/media-consumption.yml
-  - ./compose-files/media-management.yml
-  - ./compose-files/dashboards.yml
+
+  ####### CONTAINER MANAGEMENT ########
+  - ./compose-files/portainer.yml
+
+  ####### MEDIA CONSUMPTION ########
+  - ./compose-files/emby.yml ## --profile emby
+  - ./compose-files/plex.yml ## --profile plex
+  - ./compose-files/jellyfin.yml ## --profile jellyfin
+  - ./compose-files/komga.yml
+
+  ####### MEDIA MANAGEMENT ########
+  - ./compose-files/jellyseerr.yml
+  - ./compose-files/sonarr.yml
+  - ./compose-files/radarr.yml
+  - ./compose-files/prowlarr.yml
+  - ./compose-files/jackett.yml ## --profile jackett
+
+  ####### DASHBOARDS ########
+  - ./compose-files/dashy.yml
+  - ./compose-files/heimdall.yml ## --profile heimdall
+
+  ####### DOCKER VOLUMES AND NETWORK CONFIG ########
   - ./compose-files/optional-mounted-volumes.yml
   - ./compose-files/networks.yml

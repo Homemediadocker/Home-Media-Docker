@@ -1,0 +1,15 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Prowlarr:/config
+    ports:
+      - ${PROWLARR_HOST_PORT}:9696
+    restart: unless-stopped
+    networks:
+      - default
