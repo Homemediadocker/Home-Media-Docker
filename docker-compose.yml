@@ -76,8 +76,8 @@ services:
       WEBPASSWORD: ${PIHOLE_SECURE_WEB_PASSWORD}
     # Volumes store your data between container upgrades
     volumes:
-      - '${DEFAULT_CONTAINER_DATA_LOCATION}/PiHole/config:/etc/pihole'
-      - '${DEFAULT_CONTAINER_DATA_LOCATION}/PiHole/etc-dnsmasq.d:/etc/dnsmasq.d'
+      - "${DEFAULT_CONTAINER_DATA_LOCATION}/PiHole/config:/etc/pihole"
+      - "${DEFAULT_CONTAINER_DATA_LOCATION}/PiHole/etc-dnsmasq.d:/etc/dnsmasq.d"
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
@@ -125,17 +125,17 @@ services:
     # runtime: nvidia # Expose NVIDIA GPUs if any (Apple Silicon does not use this)
     # network_mode: host # Enable DLNA and Wake-on-Lan
     # devices:
-      # - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes, enable for NVIDIA Too i think?
-      # - /dev/nvidia-uvm:/dev/nvidia-uvm # Added nvidia devices here
-      # - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools # Added nvidia devices here
-      # - /dev/nvidia-modeset:/dev/nvidia-modeset # Added nvidia devices here
-      # - /dev/nvidiactl:/dev/nvidiactl # Added nvidia devices here
-      # - /dev/nvidia0:/dev/nvidia0 # Added nvidia devices here
-      # - /dev/nvidia1:/dev/nvidia1 # Added nvidia devices here (i have a 2nd GPU so i needed this too)
-      # - /dev/vchiq:/dev/vchiq # MMAL/OMX on Raspberry Pi
-      # - /dev/video10:/dev/video10 #optional other video cards
-      # - /dev/video11:/dev/video11 #optional
-      # - /dev/video12:/dev/video12 #optional
+    # - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes, enable for NVIDIA Too i think?
+    # - /dev/nvidia-uvm:/dev/nvidia-uvm # Added nvidia devices here
+    # - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools # Added nvidia devices here
+    # - /dev/nvidia-modeset:/dev/nvidia-modeset # Added nvidia devices here
+    # - /dev/nvidiactl:/dev/nvidiactl # Added nvidia devices here
+    # - /dev/nvidia0:/dev/nvidia0 # Added nvidia devices here
+    # - /dev/nvidia1:/dev/nvidia1 # Added nvidia devices here (i have a 2nd GPU so i needed this too)
+    # - /dev/vchiq:/dev/vchiq # MMAL/OMX on Raspberry Pi
+    # - /dev/video10:/dev/video10 #optional other video cards
+    # - /dev/video11:/dev/video11 #optional
+    # - /dev/video12:/dev/video12 #optional
     restart: unless-stopped
     profiles:
       - emby
@@ -341,6 +341,7 @@ services:
     depends_on:
       - vpn
 
+  ############## DASHBOARDS ##############################
   heimdall:
     image: lscr.io/linuxserver/heimdall:latest
     container_name: heimdall
@@ -354,6 +355,28 @@ services:
       - ${HEIMDALL_HOST_HTTP_PORT}:80
       - ${HEIMDALL_HOST_HTTPS_PORT}:443
     restart: unless-stopped
+    profiles:
+      - "heimdall"
+
+  dashy:
+    image: lissy93/dashy
+    container_name: dashy
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Dashy:/app/user-data
+      - ${DASHY_CONFIG_LOCATION}:/app/user-data/conf.yml # starter config for all the stuff in this docker compose
+    ports:
+      - ${DASHY_HOST_HTTP_PORT}:8080
+    environment:
+      - NODE_ENV=production # needed for optimized container image
+      - UID=${UID}
+      - GID=${GID}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "/app/services/healthcheck"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 ############# NETWORK DRIVES or NAMED VOLUMES #############
 volumes:

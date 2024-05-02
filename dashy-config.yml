@@ -1,0 +1,182 @@
+appConfig:
+  theme: adventure
+  language: en
+  layout: auto
+  iconSize: medium
+pageInfo:
+  title: Home Media Docker Dashboard
+  navLinks: []
+  logo: >-
+    https://homemediadocker.github.io/Home-Media-Docker/img/home-media-docker-logo.png
+sections:
+  - name: Home Media Docker Docs
+    icon: >-
+      https://homemediadocker.github.io/Home-Media-Docker/img/home-media-docker-logo.png
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Docs
+        description: Docs Site for this package
+        icon: >-
+          https://homemediadocker.github.io/Home-Media-Docker/img/home-media-docker-logo.png
+        url: https://homemediadocker.github.io/Home-Media-Docker/
+        target: newtab
+        statusCheck: true
+        id: 0_1962_docs
+      - title: Hover Me
+        description: >-
+          Edit the Service URLs in these cards to adjust them once you move into
+          a non local environment.  All URLs are configured for localhost out of
+          the box
+        displayData: Status checks will not work with localhost
+        id: 1_1962_hoverme
+  - name: Content Servers
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Emby
+        description: Media Server
+        icon: hl-emby
+        url: http://127.0.0.1:8096/
+        target: newtab
+        hotkey: 1
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 0_1509_emby
+      - title: Jellyfin
+        description: Media Server
+        icon: hl-jellyfin
+        url: http://127.0.0.1:8096/
+        target: newtab
+        statusCheck: true
+        id: 1_1509_jellyfin
+      - title: Plex
+        description: Media Server
+        icon: hl-plex
+        url: http://localhost:32400
+        target: newtab
+        statusCheck: true
+        id: 2_1509_plex
+      - title: Komga
+        description: Comic book/Manga server
+        icon: hl-komga
+        url: http://127.0.0.1:8341/
+        target: newtab
+        statusCheck: true
+        id: 3_1509_komga
+    icon: https://cdn0.iconfinder.com/data/icons/telecommunication-1/50/18-512.png
+  - name: Grabbers
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Sonarr
+        description: TV Show Grabber
+        icon: hl-sonarr
+        url: http://127.0.0.1:8989/
+        target: newtab
+        statusCheck: true
+        statusCheckAcceptCodes: "401"
+        id: 0_808_sonarr
+      - title: Radarr
+        description: Movie Grabber
+        icon: hl-radarr
+        url: http://127.0.0.1:7878
+        target: newtab
+        statusCheck: true
+        statusCheckAcceptCodes: "401"
+        id: 1_808_radarr
+      - title: Jellyseerr
+        description: Content Request Management
+        icon: hl-jellyseerr
+        url: http://127.0.0.1:5055/
+        target: newtab
+        statusCheck: true
+        id: 2_808_jellyseerr
+    icon: >-
+      https://images.dwncdn.net/images/t_app-icon-l/p/503c7111-d83c-453a-b844-5b1412e7175b/493341732/20432_4-78271072-logo
+  - name: Web Crawlers
+    icon: https://i.ebayimg.com/images/g/ypIAAOSw8gpdioNl/s-l400.png
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Prowlarr
+        description: Web Crawler for Torrent Sites
+        icon: hl-prowlarr
+        url: http://127.0.0.1:9696/
+        target: newtab
+        statusCheck: true
+        id: 0_1153_prowlarr
+  - name: Downloaders
+    icon: https://cdn.pixabay.com/photo/2013/07/13/13/59/arrow-161882_960_720.png
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Transmission
+        description: Torrent Downloader
+        icon: hl-transmission
+        url: http://127.0.0.1:9091/transmission/web/
+        target: newtab
+        statusCheck: true
+        statusCheckAcceptCodes: "401"
+        id: 0_1154_transmission
+  - name: Container Management
+    icon: >-
+      https://homemediadocker.github.io/Home-Media-Docker/img/home-media-docker-logo.png
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Portainer
+        description: Like a Web Based Docker Desktop
+        icon: hl-portainer
+        url: https://127.0.0.1:49443/
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 0_1984_portainer
+      - title: Duplicati
+        description: Container data backups
+        icon: hl-duplicati
+        url: http://127.0.0.1:8200/login.html
+        target: newtab
+        statusCheck: true
+        id: 1_1984_duplicati
+  - name: Misc
+    icon: generative
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: PiHole
+        description: Ad blocker and dns server
+        icon: hl-pihole
+        url: http://127.0.0.1:8880/admin/login.php
+        target: newtab
+        statusCheck: false
+        id: 0_396_pihole
