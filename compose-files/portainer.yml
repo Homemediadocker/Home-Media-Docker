@@ -11,3 +11,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl
     restart: unless-stopped
+    profiles:
+      - all
+      - portainer

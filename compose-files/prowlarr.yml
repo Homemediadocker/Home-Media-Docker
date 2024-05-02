@@ -13,3 +13,6 @@ services:
     restart: unless-stopped
     networks:
       - default
+    profiles:
+      - all
+      - prowlarr

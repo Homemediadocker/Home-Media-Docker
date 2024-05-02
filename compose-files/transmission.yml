@@ -28,3 +28,6 @@ services:
       - prowlarr
       - sonarr
       - radarr
+    profiles:
+      - all
+      - transmission

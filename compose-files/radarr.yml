@@ -18,3 +18,6 @@ services:
       - prowlarr
     networks:
       - default
+    profiles:
+      - all
+      - radarr

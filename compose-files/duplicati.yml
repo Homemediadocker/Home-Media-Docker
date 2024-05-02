@@ -19,3 +19,6 @@ services:
     restart: unless-stopped
     depends_on:
       - vpn
+    profiles:
+      - all
+      - duplicati

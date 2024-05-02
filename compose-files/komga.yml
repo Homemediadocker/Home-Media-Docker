@@ -19,3 +19,6 @@ services:
     restart: unless-stopped
     networks:
       - default
+    profiles:
+      - all
+      - komga

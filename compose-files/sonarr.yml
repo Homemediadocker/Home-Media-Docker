@@ -19,3 +19,6 @@ services:
       - prowlarr
     networks:
       - default
+    profiles:
+      - all
+      - sonarr

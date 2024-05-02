@@ -20,6 +20,9 @@ services:
       - ${BOOKSTACK_DB_CONTAINER_NAME}
     networks:
       - default
+    profiles:
+      - all
+      - bookstack
   bookstack_db:
     image: lscr.io/linuxserver/mariadb
     container_name: ${BOOKSTACK_DB_CONTAINER_NAME}
@@ -34,3 +37,6 @@ services:
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/db:/config
     restart: unless-stopped
+    profiles:
+      - all
+      - bookstack
