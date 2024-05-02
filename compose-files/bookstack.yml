@@ -6,7 +6,7 @@ services:
       - PUID=${UID}
       - PGID=${GID}
       - APP_URL=${BOOKSTACK_APP_URL}
-      - DB_HOST=${BOOKSTACK_DB_CONTAINER_NAME}
+      - DB_HOST=${BOOKSTACK_DB_HOST}
       - DB_PORT=${BOOKSTACK_DB_PORT}
       - DB_USER=${BOOKSTACK_DB_USER}
       - DB_PASS=${BOOKSTACK_DB_PASS}
