@@ -13,9 +13,10 @@ services:
       - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
     ports:
       - ${RADARR_HOST_PORT}:7878
+    labels:
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}.rule=Host(`${RADARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.web.services.${RADARR_CONTAINER_NAME}.loadbalancer.server.port=${RADARR_HOST_PORT}"
     restart: unless-stopped
-    depends_on:
-      - prowlarr
     networks:
       - default
     profiles:

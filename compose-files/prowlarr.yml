@@ -16,3 +16,5 @@ services:
     profiles:
       - all
       - prowlarr
+      - radarr
+      - sonarr

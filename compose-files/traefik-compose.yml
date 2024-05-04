@@ -1,0 +1,17 @@
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:latest
+    hostname: ${PROJECT_HOSTNAME}
+    ports:
+      - 80:80
+      - 443:443
+      - ${TRAEFIK_DASHBOARD_PORT}:8080 # dashboard port
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${TRAEFIK_CONFIG_FILE_LOCATION}:/etc/traefik/traefik.yml
+      # - /traefik/acme.json:/acme.json
+    profiles:
+      - traefik
+      - all
+    restart: unless-stopped
