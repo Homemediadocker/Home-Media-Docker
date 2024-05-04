@@ -19,7 +19,7 @@ services:
       - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}.tls=true"
       - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}.rule=Host(`${JELLYFIN_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}.entrypoints=websecure"
-      - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}.tls.certresolver=myresolver"
+      - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}.tls.certresolver=le"
       - "traefik.http.middlewares.${JELLYFIN_CONTAINER_NAME}.redirectscheme.scheme=https"
       - "traefik.http.middlewares.${JELLYFIN_CONTAINER_NAME}.redirectscheme.permanent=true"
       - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}.middlewares=${JELLYFIN_CONTAINER_NAME}"
@@ -27,7 +27,7 @@ services:
       # - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}-secure.rule=Host(`${JELLYFIN_CONTAINER_NAME}.example.com`)"
       # - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}-secure.middlewares=secure@file"
       # - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}-secure.tls=true"
-      # - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}-secure.tls.certresolver=myresolver"
+      # - "traefik.http.routers.${JELLYFIN_CONTAINER_NAME}-secure.tls.certresolver=le"
     ports:
       - ${JELLYFIN_HOST_PORT}:8096
       - ${JELLYFIN_HOST_PORT_SSL}:8920 #optional

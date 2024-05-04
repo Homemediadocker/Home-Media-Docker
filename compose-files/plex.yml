@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls=true"
       - "traefik.http.routers.${PLEX_CONTAINER_NAME}.rule=Host(`${PLEX_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${PLEX_CONTAINER_NAME}.entrypoints=websecure"
-      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls.certresolver=myresolver"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls.certresolver=le"
       - "traefik.http.middlewares.${PLEX_CONTAINER_NAME}.redirectscheme.scheme=https"
       - "traefik.http.middlewares.${PLEX_CONTAINER_NAME}.redirectscheme.permanent=true"
       - "traefik.http.routers.${PLEX_CONTAINER_NAME}.middlewares=${PLEX_CONTAINER_NAME}"
@@ -30,7 +30,7 @@ services:
       # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.rule=Host(`${PLEX_CONTAINER_NAME}.example.com`)"
       # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.middlewares=secure@file"
       # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.tls=true"
-      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.tls.certresolver=myresolver"
+      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.tls.certresolver=le"
     restart: unless-stopped
     networks:
       - homelab
