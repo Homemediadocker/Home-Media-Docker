@@ -12,6 +12,11 @@ services:
       - NODE_ENV=production # needed for optimized container image
       - UID=${UID}
       - GID=${GID}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.rule=Host(`${DASHY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.web.services.${DASHY_CONTAINER_NAME}.loadbalancer.server.port=${DASHY_HOST_HTTP_PORT}"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "/app/services/healthcheck"]
@@ -22,3 +27,5 @@ services:
     profiles:
       - all
       - dashy
+    networks:
+      - homelab

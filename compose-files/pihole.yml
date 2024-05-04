@@ -11,6 +11,12 @@ services:
     environment:
       TZ: ${TIMEZONE}
       WEBPASSWORD: ${PIHOLE_SECURE_WEB_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.rule=Host(`${PIHOLE_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.middlewares.${PIHOLE_CONTAINER_NAME}.addprefix.prefix=/admin"
+      - "traefik.http.services.${PIHOLE_CONTAINER_NAME}.loadBalancer.server.port=80"
     # Volumes store your data between container upgrades
     volumes:
       - "${DEFAULT_CONTAINER_DATA_LOCATION}/PiHole/config:/etc/pihole"
@@ -19,6 +25,8 @@ services:
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
+    networks:
+      - homelab
     profiles:
       - all
       - pihole

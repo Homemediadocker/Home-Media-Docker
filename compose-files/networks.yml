@@ -1,4 +1,6 @@
 networks:
+  homelab:
+    driver: bridge
   default:
     driver: bridge
     name: home-media-docker_default

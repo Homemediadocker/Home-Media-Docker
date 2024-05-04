@@ -11,7 +11,14 @@ services:
       - ${JELLYSEERR_HOST_PORT}:5055
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyseerr:/app/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${JELLYSEERR_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.routers.${JELLYSEERR_CONTAINER_NAME}.rule=Host(`${JELLYSEERR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.web.services.${JELLYSEERR_CONTAINER_NAME}.loadbalancer.server.port=${JELLYSEERR_HOST_PORT}"
     restart: unless-stopped
+    networks:
+      - homelab
     profiles:
       - all
       - jellyseerr

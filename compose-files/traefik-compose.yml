@@ -1,17 +1,39 @@
 services:
   traefik:
-    container_name: traefik
+    container_name: ${TRAEFIK_CONTAINER_NAME}
     image: traefik:latest
     hostname: ${PROJECT_HOSTNAME}
+    command:
+      - "--log.level=INFO"
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--api.debug=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--serversTransport.insecureSkipVerify=true"
+      # - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
+      # - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
+      # - "--certificatesresolvers.myresolver.acme.email=email removed"
+      # - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    labels:
+      traefik.enable: true
+      traefik.docker.network: docker_homelab
+      traefik.http.routers.mydashboard.rule: "Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      traefik.http.routers.mydashboard.service: api@internal
     ports:
       - 80:80
       - 443:443
       - ${TRAEFIK_DASHBOARD_PORT}:8080 # dashboard port
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${TRAEFIK_CONFIG_FILE_LOCATION}:/etc/traefik/traefik.yml
+      # - ${TRAEFIK_CONFIG_FILE_LOCATION}:/etc/traefik/traefik.yml
       # - /traefik/acme.json:/acme.json
     profiles:
       - traefik
       - all
+    networks:
+      - homelab
+      - default
     restart: unless-stopped
