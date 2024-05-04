@@ -33,5 +33,5 @@ jobs:
         run: docker stop $(docker ps -a --filter "name=vpn" -q) portainer komga sonarr radarr prowlarr jellyseerr transmission duplicati
       - name: Teardown Environment - Remove Containers
         run: docker rm $(docker ps -a --filter "name=vpn" -q) portainer komga sonarr radarr prowlarr jellyseerr transmission duplicati
-      - name: Teardown Environment - Remove Images
-        run: docker rmi $(docker images -q)
+      # - name: Teardown Environment - Remove Images
+      #   run: docker rmi $(docker images -q)
