@@ -8,6 +8,11 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Prowlarr:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PROWLARR_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.routers.${PROWLARR_CONTAINER_NAME}.rule=Host(`${PROWLARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.web.services.${PROWLARR_CONTAINER_NAME}.loadbalancer.server.port=${PROWLARR_HOST_PORT}"
     ports:
       - ${PROWLARR_HOST_PORT}:9696
     restart: unless-stopped
@@ -16,3 +21,5 @@ services:
     profiles:
       - all
       - prowlarr
+      - radarr
+      - sonarr

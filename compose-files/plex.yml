@@ -7,6 +7,7 @@ services:
       - PGID=${GID}
       - TZ=${TIMEZONE}
       - VERSION=${PLEX_VERSION}
+      - "ADVERTISE_IP=https://${PLEX_CONTAINER_NAME}.${PROJECT_HOSTNAME}:443"
       - PLEX_CLAIM=${PLEX_CLAIM} #optional
     ports:
       - ${PLEX_HOST_PORT}:32400
@@ -14,6 +15,24 @@ services:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Plex:/config
       - ${LOCAL_TV_PATH}:/tv
       - ${LOCAL_MOVIES_PATH}:/movies
+    labels:
+      ########## TODO - SETUP AUTH MIDDLEWARE
+      - "traefik.enable=true"
+      - "traefik.http.services.${PLEX_CONTAINER_NAME}.loadbalancer.server.port=${PLEX_HOST_PORT}"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls=true"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.rule=Host(`${PLEX_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.${PLEX_CONTAINER_NAME}.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.${PLEX_CONTAINER_NAME}.redirectscheme.permanent=true"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.middlewares=${PLEX_CONTAINER_NAME}"
+      #  - "traefik.http.services.${PLEX_CONTAINER_NAME}.loadbalancer.server.scheme=https"
+      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.rule=Host(`${PLEX_CONTAINER_NAME}.example.com`)"
+      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.middlewares=secure@file"
+      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.tls=true"
+      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.tls.certresolver=myresolver"
     restart: unless-stopped
+    networks:
+      - homelab
     profiles:
       - plex

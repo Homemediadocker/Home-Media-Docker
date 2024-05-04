@@ -5,6 +5,11 @@ services:
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Komga/config:/config
       - ${LOCAL_BOOKS_PATH}:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.rule=Host(`${KOMGA_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.web.services.${KOMGA_CONTAINER_NAME}.loadbalancer.server.port=${KOMGA_HOST_PORT}"
     ports:
       - ${KOMGA_HOST_PORT}:25600
     user: "${UID}:${GID}"
@@ -18,7 +23,7 @@ services:
       - JAVA_OPTS=${KOMGA_JAVA_OPTS}
     restart: unless-stopped
     networks:
-      - default
+      - homelab
     profiles:
       - all
       - komga

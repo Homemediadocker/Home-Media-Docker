@@ -11,6 +11,11 @@ services:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Sonarr:/config
       - ${LOCAL_TV_PATH}:/tv # optional but needed to map external data
       - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.web.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
     ports:
       - ${SONARR_HOST_PORT}:8989
       - ${SONARR_HOST_PORT_SSL}:9898 # ssl port if you enable it
@@ -18,7 +23,7 @@ services:
     depends_on:
       - prowlarr
     networks:
-      - default
+      - homelab
     profiles:
       - all
       - sonarr

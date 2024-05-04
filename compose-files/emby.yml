@@ -38,5 +38,22 @@ services:
     # - /dev/video11:/dev/video11 #optional
     # - /dev/video12:/dev/video12 #optional
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.${EMBY_CONTAINER_NAME}.loadbalancer.server.port=${EMBY_HOST_PORT}"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls=true"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.rule=Host(`${EMBY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.${EMBY_CONTAINER_NAME}.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.${EMBY_CONTAINER_NAME}.redirectscheme.permanent=true"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.middlewares=${EMBY_CONTAINER_NAME}"
+      #  - "traefik.http.services.${EMBY_CONTAINER_NAME}.loadbalancer.server.scheme=https"
+      # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.rule=Host(`${EMBY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.middlewares=secure@file"
+      # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.tls=true"
+      # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.tls.certresolver=myresolver"
+    networks:
+      - homelab
     profiles:
       - emby

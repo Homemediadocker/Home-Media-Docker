@@ -10,7 +10,14 @@ services:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PORTAINER_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.routers.${PORTAINER_CONTAINER_NAME}.rule=Host(`${PORTAINER_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.web.services.${PORTAINER_CONTAINER_NAME}.loadbalancer.server.port=${PORTAINER_HOST_PORT}"
     restart: unless-stopped
+    networks:
+      - homelab
     profiles:
       - all
       - portainer
