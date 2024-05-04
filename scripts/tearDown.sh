@@ -45,10 +45,10 @@ elif [[ "$mainmenuinput" = "2" ]]; then
     else
     echo ""
     echo "Okay Not deleting everything"
-    exit 1;
+    exit 0;
     fi
 else
 echo "Doing nothing."
-  exit 1
+  exit 0
 fi
-exit 1
+exit 0

@@ -24,11 +24,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - run: cp ./optional-services/home-automation/.env-example ./optional-services/home-automation/.env
+      - run: cp .env-example .env
       - uses: isbang/compose-action@v1.5.1
         with:
-          compose-file: "./other-services/home-automation/docker-compose.yml"
-
+          compose-file: "docker-compose.yml"
+          compose-flags: "--profile homeassistant"
       # Runs a single command using the runners shell
       # - name: Run a one-line script
       #   run: echo Hello, world!
