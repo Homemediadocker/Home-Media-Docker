@@ -1,7 +1,7 @@
 services:
   traefik:
     image: traefik:latest
-    container_name: traefik
+    container_name: ${TRAEFIK_CONTAINER_NAME}
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -47,14 +47,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=home-media-docker_homelab"
+      - "traefik.http.routers.mydashboard.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.traefik.entrypoints=web"
-      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=websecure"
-      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.traefik-secure.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
