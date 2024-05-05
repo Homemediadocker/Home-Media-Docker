@@ -14,7 +14,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.${PORTAINER_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${PORTAINER_CONTAINER_NAME}.rule=Host(`${PORTAINER_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.web.services.${PORTAINER_CONTAINER_NAME}.loadbalancer.server.port=${PORTAINER_HOST_PORT}"
+      - "traefik.http.services.${PORTAINER_CONTAINER_NAME}.loadbalancer.server.port=${PORTAINER_HOST_PORT}"
     restart: unless-stopped
     networks:
       - homelab

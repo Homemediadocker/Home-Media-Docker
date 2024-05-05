@@ -19,7 +19,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.rule=Host(`${BOOKSTACK_APP_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.web.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.port=${BOOKSTACK_WEB_HOST_HTTP_PORT}"
+      - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.port=${BOOKSTACK_WEB_HOST_HTTP_PORT}"
     restart: unless-stopped
     depends_on:
       - ${BOOKSTACK_DB_CONTAINER_NAME}

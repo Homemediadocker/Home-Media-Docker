@@ -9,7 +9,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.rule=Host(`${KOMGA_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.web.services.${KOMGA_CONTAINER_NAME}.loadbalancer.server.port=${KOMGA_HOST_PORT}"
+      - "traefik.http.services.${KOMGA_CONTAINER_NAME}.loadbalancer.server.port=${KOMGA_HOST_PORT}"
     ports:
       - ${KOMGA_HOST_PORT}:25600
     user: "${UID}:${GID}"

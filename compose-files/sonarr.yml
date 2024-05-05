@@ -15,7 +15,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.web.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
+      - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"

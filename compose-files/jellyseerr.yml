@@ -15,7 +15,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.${JELLYSEERR_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${JELLYSEERR_CONTAINER_NAME}.rule=Host(`${JELLYSEERR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.web.services.${JELLYSEERR_CONTAINER_NAME}.loadbalancer.server.port=${JELLYSEERR_HOST_PORT}"
+      - "traefik.http.services.${JELLYSEERR_CONTAINER_NAME}.loadbalancer.server.port=${JELLYSEERR_HOST_PORT}"
     restart: unless-stopped
     networks:
       - homelab
