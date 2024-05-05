@@ -16,6 +16,12 @@ services:
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.web.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls.certresolver=le"
+      - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.permanent=true"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.middlewares=${SONARR_CONTAINER_NAME}"
     ports:
       - ${SONARR_HOST_PORT}:8989
       - ${SONARR_HOST_PORT_SSL}:9898 # ssl port if you enable it
