@@ -24,14 +24,15 @@ services:
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--serversTransport.insecureSkipVerify=true"
       ###### certificate resolvers and acme/cloudflare
+      - "--certificatesResolvers.cloudflare=true"
       - "--certificatesResolvers.cloudflare.acme.email=${CF_API_EMAIL}"
       - "--certificatesResolvers.cloudflare.acme.storage=acme.json"
-      # - "--certificatesResolvers.cloudflare.acme.caServer=https://acme-v02.api.letsencrypt.org/directory"
+      # - "--certificatesResolvers.cloudflare.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
       # Optionally use the staging server to prevent exhausting rate limits
-      - "--certificatesResolvers.cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesResolvers.cloudflare.acme.dnsChallenge=true"
-      - "--certificatesResolvers.cloudflare.acme.dnsChallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
-      - "--certificatesResolvers.cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53"
+      - "--certificatesResolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesResolvers.cloudflare.acme.dnschallenge=true"
+      - "--certificatesResolvers.cloudflare.acme.dnschallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
+      - "--certificatesResolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53"
     environment:
       CF_DNS_API_TOKEN_FILE: /run/secrets/cf_api_token # note using _FILE for docker secrets
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
