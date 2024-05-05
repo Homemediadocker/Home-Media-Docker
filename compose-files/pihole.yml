@@ -14,7 +14,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.rule=Host(`${PIHOLE_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.entrypoints=web"
+      - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.entrypoints=websecure"
       - "traefik.http.middlewares.${PIHOLE_CONTAINER_NAME}.addprefix.prefix=/admin"
       - "traefik.http.services.${PIHOLE_CONTAINER_NAME}.loadBalancer.server.port=80"
     # Volumes store your data between container upgrades
