@@ -1,12 +1,6 @@
 networks:
   homelab:
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: 192.168.86.0/24 #update if needed
-          gateway: 192.168.86.1 #update if needed
+    driver: bridge
   default:
     driver: bridge
     name: home-media-docker_default
