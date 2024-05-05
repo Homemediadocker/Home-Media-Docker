@@ -18,7 +18,7 @@ services:
       - "traefik.web.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
-      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls.certresolver=le"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
       - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.scheme=https"
       - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.permanent=true"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.middlewares=${SONARR_CONTAINER_NAME}"

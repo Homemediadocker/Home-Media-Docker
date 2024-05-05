@@ -44,7 +44,7 @@ services:
       - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls=true"
       - "traefik.http.routers.${EMBY_CONTAINER_NAME}.rule=Host(`${EMBY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${EMBY_CONTAINER_NAME}.entrypoints=websecure"
-      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls.certresolver=le"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
       - "traefik.http.middlewares.${EMBY_CONTAINER_NAME}.redirectscheme.scheme=https"
       - "traefik.http.middlewares.${EMBY_CONTAINER_NAME}.redirectscheme.permanent=true"
       - "traefik.http.routers.${EMBY_CONTAINER_NAME}.middlewares=${EMBY_CONTAINER_NAME}"
@@ -52,7 +52,7 @@ services:
       # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.rule=Host(`${EMBY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.middlewares=secure@file"
       # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.tls=true"
-      # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.tls.certresolver=le"
+      # - "traefik.http.routers.${EMBY_CONTAINER_NAME}-secure.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
     networks:
       - homelab
     profiles:
