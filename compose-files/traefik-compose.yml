@@ -26,6 +26,7 @@ services:
       - "--certificatesresolvers.le.acme.httpchallenge=true"
       - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.le.acme.dnschallenge=true"
+      - "--certificatesresolvers.le.acme.dnschallenge.delayBeforeCheck=10"
       - "--certificatesresolvers.le.acme.dnschallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
