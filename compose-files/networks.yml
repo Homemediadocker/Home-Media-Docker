@@ -2,15 +2,14 @@ networks:
   pihole_network:
     driver: macvlan
     driver_opts:
-      parent: eth0
+      parent: ${PIHOLE_NETWORK_INTERFACE} ## i.e. ---- eth0
     ipam:
       config:
-        - subnet: 192.168.0.0/16 #update if needed
-          gateway: 192.168.86.1 #update if needed
+        - subnet: ${PIHOLE_NETWORK_ADDRESS_POOL} #update if needed
+          gateway: ${PIHOLE_NETWORK_GATEWAY} #update if needed
   homelab:
     driver: bridge
   default:
     driver: bridge
     name: home-media-docker_default
   zwave:
-  

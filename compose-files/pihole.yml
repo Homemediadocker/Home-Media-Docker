@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
     networks:
       pihole_network:
-        ipv4_address: "192.168.87.149" #update, assign open ip manually
+        ipv4_address: "${PIHOLE_STATIC_IP_ADDRESS}" #update, assign open ip manually
     profiles:
       - all
       - pihole
