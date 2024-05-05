@@ -18,10 +18,11 @@ services:
       #- "--certificatesResolvers.letsencrypt.acme.caServer=https://acme-v02.api.letsencrypt.org/directory"
       # Optionally use the staging server to prevent exhausting rate limits
       - "--certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesResolvers.letsencrypt.acme.email=${CLOUDFLARE_EMAIL}"
+      - "--certificatesResolvers.letsencrypt.acme.email=${CF_API_EMAIL}"
       - "--certificatesResolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
       - "--certificatesResolvers.letsencrypt.acme.dnschallenge=true"
       - "--certificatesResolvers.letsencrypt.acme.dnschallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
+      - "--certificatesResolvers.le.acme.email=${CF_API_EMAIL}"
       - "--certificatesresolvers.le.acme.httpchallenge=true"
       - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.le.acme.dnschallenge=true"
