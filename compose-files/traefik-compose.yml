@@ -19,7 +19,7 @@ services:
       # Optionally use the staging server to prevent exhausting rate limits
       - "--certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesResolvers.letsencrypt.acme.email=${CF_API_EMAIL}"
-      - "--certificatesResolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesResolvers.letsencrypt.acme.storage=/acme.json"
       - "--certificatesResolvers.letsencrypt.acme.dnschallenge=true"
       - "--certificatesResolvers.letsencrypt.acme.dnschallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
       - "--certificatesResolvers.le.acme.email=${CF_API_EMAIL}"
@@ -42,7 +42,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # - ${TRAEFIK_CONFIG_FILE_LOCATION}:/etc/traefik/traefik.yml
-      # - /traefik/acme.json:/acme.json
+      - ../acme.json:/acme.json
     profiles:
       - traefik
       - all
