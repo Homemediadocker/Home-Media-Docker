@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:v3.0
     container_name: ${TRAEFIK_CONTAINER_NAME}
     restart: unless-stopped
     security_opt:
@@ -10,56 +10,36 @@ services:
     ports:
       - 80:80
       - 443:443/tcp
-      - ${TRAEFIK_DASHBOARD_PORT}:8080
       - 443:443/udp # Uncomment if you want HTTP3
+      - ${TRAEFIK_DASHBOARD_PORT}:8080
     command:
-      - "--log.level=INFO"
-      # - "--api.insecure=true"
-      - "--api.dashboard=true"
-      - "--api.debug=false"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--serversTransport.insecureSkipVerify=true"
-      ###### certificate resolvers and acme/cloudflare
-      - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}=true"
-      - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}.acme.email=${CF_API_EMAIL}"
-      - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}.acme.storage=acme.json"
-      # - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
-      # Optionally use the staging server to prevent exhausting rate limits
-      - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}.acme.dnschallenge=true"
-      - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}.acme.dnschallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
-      - "--certificatesResolvers.${ACME_DNS_CHALLENGE_PROVIDER}.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53"
+      - chmod 600 /acme.json
     environment:
       # CF_DNS_API_TOKEN_FILE: /run/secrets/cf_api_token # note using _FILE for docker secrets
       # CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
       TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
       NETLIFY_TOKEN: ${TRAEFIK_NETLIFY_TOKEN}
+    # secrets:
+    #   - cf_api_token
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ../traefik-data/traefik.yml:/traefik.yml:ro
       - ../traefik-data/acme.json:/acme.json
-      # - ./data/traefik.yml:/traefik.yml:ro
-      # - ./data/config.yml:/config.yml:ro
+      # - ../traefik-data/config.yml:/config.yml:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=home-media-docker_homelab"
-      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.http.routers.traefik.entrypoints=web"
-      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.entrypoints=http"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.rule=Host(`${TRAEFIK_CONTAINER_NAME}.local.example.com`)"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
-      - "traefik.http.routers.traefik-secure.entrypoints=websecure"
-      - "traefik.http.routers.traefik-secure.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
-      - "traefik.http.routers.traefik-secure.tls=true"
-      - "traefik.http.routers.traefik-secure.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main=${PROJECT_HOSTNAME}"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${PROJECT_HOSTNAME}"
-      - "traefik.http.routers.traefik-secure.service=api@internal"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.entrypoints=https"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.rule=Host(`${TRAEFIK_CONTAINER_NAME}.local.example.com`)"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls=true"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.domains[0].main=${PROJECT_HOSTNAME}"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.domains[0].sans=*.${PROJECT_HOSTNAME}"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.service=api@internal"

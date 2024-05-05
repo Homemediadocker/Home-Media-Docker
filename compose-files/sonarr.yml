@@ -12,16 +12,21 @@ services:
       - ${LOCAL_TV_PATH}:/tv # optional but needed to map external data
       - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
     labels:
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=web"
+      # - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      # - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
+      # - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=websecure"
+      # - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
+      # - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      # - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.scheme=https"
+      # - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.permanent=true"
+      # - "traefik.http.routers.${SONARR_CONTAINER_NAME}.middlewares=${SONARR_CONTAINER_NAME}"
       - "traefik.enable=true"
-      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
-      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
-      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
-      - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.${SONARR_CONTAINER_NAME}.redirectscheme.permanent=true"
-      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.middlewares=${SONARR_CONTAINER_NAME}"
+      - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
     ports:
       - ${SONARR_HOST_PORT}:8989
       - ${SONARR_HOST_PORT_SSL}:9898 # ssl port if you enable it
