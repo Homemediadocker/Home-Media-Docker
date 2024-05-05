@@ -14,8 +14,9 @@ services:
       - GID=${GID}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${DASHY_CONTAINER_NAME}.rule=Host(`${DASHY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${DASHY_CONTAINER_NAME}.loadbalancer.server.port=${DASHY_HOST_HTTP_PORT}"
     restart: unless-stopped
     healthcheck:

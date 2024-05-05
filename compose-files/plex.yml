@@ -18,19 +18,10 @@ services:
     labels:
       ########## TODO - SETUP AUTH MIDDLEWARE
       - "traefik.enable=true"
-      - "traefik.http.services.${PLEX_CONTAINER_NAME}.loadbalancer.server.port=${PLEX_HOST_PORT}"
-      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls=true"
       - "traefik.http.routers.${PLEX_CONTAINER_NAME}.rule=Host(`${PLEX_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.entrypoints=websecure"
-      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
-      - "traefik.http.middlewares.${PLEX_CONTAINER_NAME}.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.${PLEX_CONTAINER_NAME}.redirectscheme.permanent=true"
-      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.middlewares=${PLEX_CONTAINER_NAME}"
-      #  - "traefik.http.services.${PLEX_CONTAINER_NAME}.loadbalancer.server.scheme=https"
-      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.rule=Host(`${PLEX_CONTAINER_NAME}.example.com`)"
-      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.middlewares=secure@file"
-      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.tls=true"
-      # - "traefik.http.routers.${PLEX_CONTAINER_NAME}-secure.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${PLEX_CONTAINER_NAME}.loadbalancer.server.port=${PLEX_HOST_PORT}"
     restart: unless-stopped
     networks:
       - homelab

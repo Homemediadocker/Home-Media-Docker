@@ -17,8 +17,9 @@ services:
       - ${BOOKSTACK_WEB_HOST_HTTP_PORT}:80
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.rule=Host(`${BOOKSTACK_APP_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.port=${BOOKSTACK_WEB_HOST_HTTP_PORT}"
     restart: unless-stopped
     depends_on:

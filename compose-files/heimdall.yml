@@ -13,8 +13,9 @@ services:
       - ${HEIMDALL_HOST_HTTPS_PORT}:443
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${HEIMDALL_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${HEIMDALL_CONTAINER_NAME}.rule=Host(`${HEIMDALL_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${HEIMDALL_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${HEIMDALL_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${HEIMDALL_CONTAINER_NAME}.loadbalancer.server.port=${HEIMDALL_HOST_HTTP_PORT}"
     restart: unless-stopped
     networks:

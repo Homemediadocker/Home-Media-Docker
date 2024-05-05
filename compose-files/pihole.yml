@@ -14,9 +14,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.rule=Host(`${PIHOLE_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${PIHOLE_CONTAINER_NAME}.tls=true"
       - "traefik.http.middlewares.${PIHOLE_CONTAINER_NAME}.addprefix.prefix=/admin"
-      - "traefik.http.services.${PIHOLE_CONTAINER_NAME}.loadBalancer.server.port=${PIHOLE_HOST_PORT}"
+      - "traefik.http.services.${PIHOLE_CONTAINER_NAME}.loadbalancer.server.port=${PIHOLE_HOST_PORT}"
     # Volumes store your data between container upgrades
     volumes:
       - "${DEFAULT_CONTAINER_DATA_LOCATION}/PiHole/config:/etc/pihole"

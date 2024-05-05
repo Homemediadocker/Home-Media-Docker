@@ -12,8 +12,6 @@ services:
       - 443:443/tcp
       - 443:443/udp # Uncomment if you want HTTP3
       - ${TRAEFIK_DASHBOARD_PORT}:8080
-    command:
-      - chmod 600 /acme.json
     environment:
       # CF_DNS_API_TOKEN_FILE: /run/secrets/cf_api_token # note using _FILE for docker secrets
       # CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
@@ -30,13 +28,13 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.entrypoints=http"
-      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.rule=Host(`${TRAEFIK_CONTAINER_NAME}.local.example.com`)"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.middlewares=traefik-https-redirect"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.entrypoints=https"
-      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.rule=Host(`${TRAEFIK_CONTAINER_NAME}.local.example.com`)"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.middlewares=traefik-auth"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls=true"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"

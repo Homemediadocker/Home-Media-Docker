@@ -7,8 +7,9 @@ services:
       - ${LOCAL_BOOKS_PATH}:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.entrypoints=web"
       - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.rule=Host(`${KOMGA_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${KOMGA_CONTAINER_NAME}.loadbalancer.server.port=${KOMGA_HOST_PORT}"
     ports:
       - ${KOMGA_HOST_PORT}:25600

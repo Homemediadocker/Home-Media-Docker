@@ -16,6 +16,12 @@ services:
     # devices: # use if you have a usb dongle for zwave/zigbee/matter or a harddrive or something
     #   - /path/to/device:/path/to/device #optional
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${HOME_ASSISTANT_CONTAINER_NAME}.rule=Host(`${HOME_ASSISTANT_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${HOME_ASSISTANT_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${HOME_ASSISTANT_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${HOME_ASSISTANT_CONTAINER_NAME}.loadbalancer.server.port=${HOME_ASSISTANT_HOST_PORT}"
     networks:
       - zwave
     # depends_on:
