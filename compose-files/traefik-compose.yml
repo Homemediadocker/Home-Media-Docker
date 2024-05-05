@@ -32,7 +32,7 @@ services:
       - CF_API_KEY=${CF_API_KEY}
     labels:
       traefik.enable: true
-      traefik.docker.network: docker_homelab
+      traefik.docker.network: home-media-docker_homelab
       traefik.http.routers.mydashboard.rule: "Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       traefik.http.routers.mydashboard.service: api@internal
     ports:
