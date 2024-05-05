@@ -1,11 +1,19 @@
 services:
   traefik:
-    container_name: ${TRAEFIK_CONTAINER_NAME}
-    image: traefik:latest
-    hostname: ${PROJECT_HOSTNAME}
+    image: traefik:v3.0
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - homelab
+    ports:
+      - 80:80
+      - 443:443/tcp
+      # - 443:443/udp # Uncomment if you want HTTP3
     command:
       - "--log.level=INFO"
-      - "--api.insecure=true"
+      # - "--api.insecure=true"
       - "--api.dashboard=true"
       - "--api.debug=false"
       - "--providers.docker=true"
@@ -15,39 +23,38 @@ services:
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--serversTransport.insecureSkipVerify=true"
-      #- "--certificatesResolvers.letsencrypt.acme.caServer=https://acme-v02.api.letsencrypt.org/directory"
+      ###### certificate resolvers and acme/cloudflare
+      - "--certificatesResolvers.cloudflare.acme.email=${CF_API_EMAIL}"
+      - "--certificatesResolvers.cloudflare.acme.storage=acme.json"
+      # - "--certificatesResolvers.cloudflare.acme.caServer=https://acme-v02.api.letsencrypt.org/directory"
       # Optionally use the staging server to prevent exhausting rate limits
-      - "--certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesResolvers.letsencrypt.acme.email=${CF_API_EMAIL}"
-      - "--certificatesResolvers.letsencrypt.acme.storage=/acme.json"
-      - "--certificatesResolvers.letsencrypt.acme.dnschallenge=true"
-      - "--certificatesResolvers.letsencrypt.acme.dnschallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
-      - "--certificatesResolvers.le.acme.email=${CF_API_EMAIL}"
-      - "--certificatesresolvers.le.acme.httpchallenge=true"
-      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.le.acme.dnschallenge=true"
-      - "--certificatesresolvers.le.acme.dnschallenge.delayBeforeCheck=10"
-      - "--certificatesresolvers.le.acme.dnschallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
+      - "--certificatesResolvers.cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesResolvers.cloudflare.acme.dnsChallenge=true"
+      - "--certificatesResolvers.cloudflare.acme.dnsChallenge.provider=${ACME_DNS_CHALLENGE_PROVIDER}"
+      - "--certificatesResolvers.cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53"
     environment:
-      - CF_API_EMAIL=${CF_API_EMAIL}
-      - CF_API_KEY=${CF_API_KEY}
-    labels:
-      traefik.enable: true
-      traefik.docker.network: home-media-docker_homelab
-      traefik.http.routers.mydashboard.rule: "Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-      traefik.http.routers.mydashboard.service: api@internal
-    ports:
-      - 80:80
-      - 443:443
-      - ${TRAEFIK_DASHBOARD_PORT}:8080 # dashboard port
+      CF_DNS_API_TOKEN_FILE: /run/secrets/cf_api_token # note using _FILE for docker secrets
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
+      TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - ${TRAEFIK_CONFIG_FILE_LOCATION}:/etc/traefik/traefik.yml
-      - ../acme.json:/acme.json
-    profiles:
-      - traefik
-      - all
-    networks:
-      - homelab
-      - default
-    restart: unless-stopped
+      - ../traefik-data/acme.json:/acme.json
+      # - ./data/traefik.yml:/traefik.yml:ro
+      # - ./data/config.yml:/config.yml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.local.example.com`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.local.example.com`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=local.example.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.example.com"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
