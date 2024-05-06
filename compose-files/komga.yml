@@ -7,10 +7,11 @@ services:
       - ${LOCAL_BOOKS_PATH}:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.rule=Host(`${KOMGA_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.tls=true"
-      - "traefik.http.services.${KOMGA_CONTAINER_NAME}.loadbalancer.server.port=${KOMGA_HOST_PORT}"
+      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.service=${KOMGA_CONTAINER_NAME}"
+      - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.rule=Host(`${KOMGA_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.services.${KOMGA_CONTAINER_NAME}.loadbalancer.server.url=http://komga:${KOMGA_HOST_PORT}" #komga in the url here is the service name which cannot be dynamic --- komga requires a url with a port in it for access
     ports:
       - ${KOMGA_HOST_PORT}:25600
     user: "${UID}:${GID}"
