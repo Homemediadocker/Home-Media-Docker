@@ -27,6 +27,7 @@ services:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
     networks:
+      homelab:
       pihole_network:
         ipv4_address: "${PIHOLE_STATIC_IP_ADDRESS}" #update, assign open ip manually
     profiles:
