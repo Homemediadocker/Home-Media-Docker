@@ -26,6 +26,7 @@ services:
       - ${BOOKSTACK_DB_CONTAINER_NAME}
     networks:
       - homelab
+      - bookstack
     profiles:
       - all
       - bookstack
@@ -43,6 +44,8 @@ services:
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/db:/config
     restart: unless-stopped
+    networks:
+      - bookstack
     profiles:
       - all
       - bookstack
