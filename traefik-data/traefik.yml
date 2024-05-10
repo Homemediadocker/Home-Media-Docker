@@ -18,12 +18,12 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-  # file:
-  #   filename: /config.yml
+  file:
+    filename: /config.yml
 certificatesResolvers:
   netlify:
     acme:
-      email: youremail@example.com
+      email: quin.carter@gmail.com
       storage: acme.json
       # caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
@@ -36,7 +36,7 @@ certificatesResolvers:
           - "1.0.0.1:53"
   cloudflare:
     acme:
-      email: youremail@example.com
+      email: quin.carter@gmail.com
       storage: acme.json
       # caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging

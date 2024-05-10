@@ -24,7 +24,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ../traefik-data/traefik.yml:/traefik.yml:ro
       - ../traefik-data/acme.json:/acme.json
-      # - ../traefik-data/config.yml:/config.yml:ro
+      - ../traefik-data/config.yml:/config.yml:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.entrypoints=http"

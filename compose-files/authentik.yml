@@ -1,0 +1,153 @@
+services:
+  authentik_postgresql:
+    image: postgres:12-alpine
+    container_name: authentik_postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    networks:
+      - homelab
+    volumes:
+      - "${DOCKERDIR}/Authentik/postgresql/data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=${AUTHENTIK_POSTGRESQL__NAME}
+      - POSTGRES_USER=${AUTHENTIK_POSTGRESQL__USER}
+      - POSTGRES_PASSWORD=${AUTHENTIK_POSTGRESQL__PASSWORD}
+    profiles:
+      - all
+      - authentik
+      - traefik
+
+  authentik_redis:
+    image: redis:alpine
+    container_name: authentik_redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    networks:
+      - homelab
+    profiles:
+      - all
+      - authentik
+      - traefik
+
+  # Use the embedded outpost (2021.8.1+) instead of the seperate Forward Auth / Proxy Provider container
+  authentik_server:
+    image: ghcr.io/goauthentik/server:latest
+    container_name: authentik_server
+    restart: unless-stopped
+    command: server
+    ports:
+      - 9000:9000
+    networks:
+      - homelab
+    volumes:
+      - "${DOCKERDIR}/Authentik/media:/media"
+      - "${DOCKERDIR}/Authentik/custom-templates:/templates"
+      # - "${DOCKERDIR}/Authentik/geoip/data:/geoip"
+    environment:
+      - AUTHENTIK_REDIS__HOST=${AUTHENTIK_REDIS__HOST}
+      - AUTHENTIK_REDIS__DB:1
+      - AUTHENTIK_POSTGRESQL__HOST=${AUTHENTIK_POSTGRESQL__HOST}
+      - AUTHENTIK_POSTGRESQL__NAME=${AUTHENTIK_POSTGRESQL__NAME}
+      - AUTHENTIK_POSTGRESQL__USER=${AUTHENTIK_POSTGRESQL__USER}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${AUTHENTIK_POSTGRESQL__PASSWORD}
+      - AUTHENTIK_EMAIL__PASSWORD=${AUTHENTIK_EMAIL__PASSWORD}
+      - AUTHENTIK_ERROR_REPORTING__ENABLED=${AUTHENTIK_ERROR_REPORTING__ENABLED}
+      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
+      - AUTHENTIK_COOKIE_DOMAIN=${AUTHENTIK_COOKIE_DOMAIN}
+      # - WORKERS
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.authentik-rtr.rule=Host(`authentik.${DOMAIN}`)"
+      - "traefik.http.routers.authentik-rtr.entrypoints=https"
+      - "traefik.http.routers.authentik-rtr.tls=true"
+      - "traefik.http.routers.authentik-rtr.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      ## Individual Application forwardAuth regex (catch any subdomain using individual application forwardAuth)
+      - "traefik.http.routers.authentik-rtr-outpost.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      - "traefik.http.routers.authentik-rtr-outpost.entrypoints=https"
+      - "traefik.http.routers.authentik-rtr-outpost.tls=true"
+      - "traefik.http.routers.authentik-rtr-outpost.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      ## HTTP Services
+      - "traefik.http.routers.authentik-rtr.service=authentik-svc"
+      - "traefik.http.services.authentik-svc.loadBalancer.server.port=9000"
+    profiles:
+      - all
+      - authentik
+      - traefik
+
+  authentik_worker:
+    image: ghcr.io/goauthentik/server:latest
+    container_name: authentik_worker
+    restart: unless-stopped
+    command: worker
+    networks:
+      - homelab
+    volumes:
+      - "${DOCKERDIR}/Authentik/media:/media"
+      - "${DOCKERDIR}/Authentik/custom-templates:/templates"
+      # - "${DOCKERDIR}/Authentik/geoip/data:/geoip"
+    environment:
+      - AUTHENTIK_REDIS__HOST=${AUTHENTIK_REDIS__HOST}
+      - AUTHENTIK_REDIS__DB:1
+      - AUTHENTIK_POSTGRESQL__HOST=${AUTHENTIK_POSTGRESQL__HOST}
+      - AUTHENTIK_POSTGRESQL__NAME=${AUTHENTIK_POSTGRESQL__NAME}
+      - AUTHENTIK_POSTGRESQL__USER=${AUTHENTIK_POSTGRESQL__USER}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${AUTHENTIK_POSTGRESQL__PASSWORD}
+      - AUTHENTIK_EMAIL__PASSWORD=${AUTHENTIK_EMAIL__PASSWORD}
+      - AUTHENTIK_ERROR_REPORTING__ENABLED=${AUTHENTIK_ERROR_REPORTING__ENABLED}
+      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
+      - AUTHENTIK_COOKIE_DOMAIN=${AUTHENTIK_COOKIE_DOMAIN}
+    profiles:
+      - all
+      - authentik
+      - traefik
+
+  # geoipupdate:
+  #   image: maxmindinc/geoipupdate:latest
+  #   container_name: geoipupdate
+  #   restart: unless-stopped
+  #   volumes:
+  #     - "${DOCKERDIR}/Authentik/geoip/data:/usr/share/GeoIP"
+  #   environment:
+  #     - GEOIPUPDATE_EDITION_IDS
+  #     - GEOIPUPDATE_FREQUENCY
+  #     - GEOIPUPDATE_ACCOUNT_ID
+  #     - GEOIPUPDATE_LICENSE_KEY
+  #   profiles:
+  #     - all
+  #     - authentik
+  #     - traefik
+
+  whoami-test:
+    image: traefik/whoami
+    container_name: whoami-test
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - homelab
+    environment:
+      - TZ
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.whoami-test-rtr.rule=Host(`whoami-test.${DOMAIN}`)"
+      - "traefik.http.routers.whoami-test-rtr.entrypoints=https"
+      - "traefik.http.routers.whoami-test-rtr.tls=true"
+      - "traefik.http.routers.whoami-test-rtr.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      ## Middlewares
+      - "traefik.http.routers.whoami-test-rtr.middlewares=middlewares-authentik@file"
+    profiles:
+      - all
+      - authentik
+      - traefik
