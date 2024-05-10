@@ -47,7 +47,7 @@ services:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/db:/config
     restart: unless-stopped
     networks:
-      - bookstack
+      - zbookstack
     profiles:
       - all
-      - zbookstack
+      - bookstack
