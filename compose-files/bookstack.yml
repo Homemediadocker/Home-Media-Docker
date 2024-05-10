@@ -20,7 +20,11 @@ services:
       - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.rule=Host(`${BOOKSTACK_APP_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.tls=true"
+      - "traefik.http.middlewares.${BOOKSTACK_APP_CONTAINER_NAME}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.middlewares=${BOOKSTACK_APP_CONTAINER_NAME}-https-redirect"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.service=${BOOKSTACK_APP_CONTAINER_NAME}"
       - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.port=${BOOKSTACK_WEB_HOST_HTTP_PORT}"
+      # - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.url=http://${BOOKSTACK_APP_CONTAINER_NAME}:${BOOKSTACK_WEB_HOST_HTTP_PORT}" #komga in the url here is the service name which cannot be dynamic --- komga requires a url with a port in it for access
     restart: unless-stopped
     depends_on:
       - ${BOOKSTACK_DB_CONTAINER_NAME}

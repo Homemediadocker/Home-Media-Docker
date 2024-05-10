@@ -25,6 +25,8 @@ services:
     volumes:
       - /lib/modules:/lib/modules:ro # Required to install wireguard module
     restart: unless-stopped
+    networks:
+      - homelab
     profiles:
       - vpn_old
   vpn:
@@ -52,6 +54,8 @@ services:
       - /lib/modules:/lib/modules:ro # Required to install wireguard module
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1 # Recomended if using ipv4 only
+    networks:
+      - homelab
     restart: unless-stopped
     profiles:
       - all
