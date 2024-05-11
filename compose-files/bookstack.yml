@@ -1,27 +1,11 @@
 services:
-  bookstack-db:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=${BOOKSTACK_DB_ROOT_PASS}
-      - MYSQL_DATABASE=${BOOKSTACK_DB_NAME}
-      - MYSQL_USER=${BOOKSTACK_DB_USER}
-      - MYSQL_PASSWORD=${BOOKSTACK_DB_PASS}
-    networks:
-      - homelab
-    volumes:
-      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/db:/var/lib/mysql
-    profiles:
-      - bookstack
-      - all
-
-  bookstack-app:
-    image: solidnerd/bookstack
+  bookstack:
+    image: lscr.io/linuxserver/bookstack
     container_name: ${BOOKSTACK_APP_CONTAINER_NAME}
     environment:
       - PUID=${UID}
       - PGID=${GID}
       - APP_URL=${BOOKSTACK_APP_URL}
-      - APP_KEY=xxx$$
       - DB_HOST=${BOOKSTACK_DB_HOST}
       - DB_PORT=${BOOKSTACK_DB_PORT}
       - DB_USER=${BOOKSTACK_DB_USER}
@@ -29,67 +13,39 @@ services:
       - DB_DATABASE=${BOOKSTACK_DB_NAME}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/app:/config
+    ports:
+      - ${BOOKSTACK_WEB_HOST_HTTP_PORT}:80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.rule=Host(`${BOOKSTACK_APP_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.port=${BOOKSTACK_WEB_HOST_HTTP_PORT}"
+    restart: unless-stopped
+    depends_on:
+      - ${BOOKSTACK_DB_CONTAINER_NAME}
     networks:
       - homelab
-    depends_on:
-      - bookstack-db
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=traefik
-      - traefik.http.services.bookstack-bookstack.loadBalancer.server.port=8080
-      - traefik.http.routers.bookstack.entrypoints=https
-      - traefik.http.routers.bookstack.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}
-      - traefik.http.routers.bookstack.rule=Host(`bookstack.xxx.com`)
+      - bookstack
     profiles:
       - all
       - bookstack
-  # bookstack:
-  #   image: lscr.io/linuxserver/bookstack
-  #   container_name: ${BOOKSTACK_APP_CONTAINER_NAME}
-  #   environment:
-  #     - PUID=${UID}
-  #     - PGID=${GID}
-  #     - APP_URL=${BOOKSTACK_APP_URL}
-  #     - DB_HOST=${BOOKSTACK_DB_HOST}
-  #     - DB_PORT=${BOOKSTACK_DB_PORT}
-  #     - DB_USER=${BOOKSTACK_DB_USER}
-  #     - DB_PASS=${BOOKSTACK_DB_PASS}
-  #     - DB_DATABASE=${BOOKSTACK_DB_NAME}
-  #   volumes:
-  #     - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/app:/config
-  #   ports:
-  #     - ${BOOKSTACK_WEB_HOST_HTTP_PORT}:80
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.rule=Host(`${BOOKSTACK_APP_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
-  #     - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.entrypoints=https"
-  #     - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.tls=true"
-  #     - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.port=${BOOKSTACK_WEB_HOST_HTTP_PORT}"
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - ${BOOKSTACK_DB_CONTAINER_NAME}
-  #   networks:
-  #     - homelab
-  #     - bookstack
-  #   profiles:
-  #     - all
-  #     - bookstack
-  # bookstack_db:
-  #   image: lscr.io/linuxserver/mariadb
-  #   container_name: ${BOOKSTACK_DB_CONTAINER_NAME}
-  #   environment:
-  #     - PUID=${UID}
-  #     - PGID=${GID}
-  #     - MYSQL_ROOT_PASSWORD=${BOOKSTACK_DB_ROOT_PASS}
-  #     - TZ=${TIMEZONE}
-  #     - MYSQL_DATABASE=${BOOKSTACK_DB_NAME}
-  #     - MYSQL_USER=${BOOKSTACK_DB_USER}
-  #     - MYSQL_PASSWORD=${BOOKSTACK_DB_PASS}
-  #   volumes:
-  #     - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/db:/config
-  #   restart: unless-stopped
-  #   networks:
-  #     - bookstack
-  #   profiles:
-  #     - all
-  #     - bookstack
+  bookstack_db:
+    image: lscr.io/linuxserver/mariadb
+    container_name: ${BOOKSTACK_DB_CONTAINER_NAME}
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - MYSQL_ROOT_PASSWORD=${BOOKSTACK_DB_ROOT_PASS}
+      - TZ=${TIMEZONE}
+      - MYSQL_DATABASE=${BOOKSTACK_DB_NAME}
+      - MYSQL_USER=${BOOKSTACK_DB_USER}
+      - MYSQL_PASSWORD=${BOOKSTACK_DB_PASS}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/db:/config
+    restart: unless-stopped
+    networks:
+      - bookstack
+    profiles:
+      - all
+      - bookstack
