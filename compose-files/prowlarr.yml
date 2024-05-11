@@ -18,7 +18,7 @@ services:
       - ${PROWLARR_HOST_PORT}:9696
     restart: unless-stopped
     networks:
-      - default
+      - homelab
     profiles:
       - all
       - prowlarr
