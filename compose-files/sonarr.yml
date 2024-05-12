@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
       ## Middlewares
-      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.middlewares=middlewares-authentik@file"
+      - ${SONARR_AUTHENTIK_MIDDLEWARE:-}
     ports:
       - ${SONARR_HOST_PORT}:8989
       - ${SONARR_HOST_PORT_SSL}:9898 # ssl port if you enable it

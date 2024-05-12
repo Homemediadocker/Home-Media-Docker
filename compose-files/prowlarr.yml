@@ -14,6 +14,8 @@ services:
       - "traefik.http.routers.${PROWLARR_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${PROWLARR_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${PROWLARR_CONTAINER_NAME}.loadbalancer.server.port=${PROWLARR_HOST_PORT}"
+      ## Middlewares
+      - ${PROWLARR_AUTHENTIK_MIDDLEWARE:-}
     ports:
       - ${PROWLARR_HOST_PORT}:9696
     restart: unless-stopped

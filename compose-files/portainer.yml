@@ -16,6 +16,9 @@ services:
       - "traefik.http.routers.${PORTAINER_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${PORTAINER_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${PORTAINER_CONTAINER_NAME}.loadbalancer.server.port=${PORTAINER_HOST_PORT}"
+      ## Middlewares
+      ###### PORTAINER HAS OAUTH BUILT IN SO THIS ISN'T NEEDED - https://docs.goauthentik.io/integrations/services/portainer/
+      # - ${PORTAINER_AUTHENTIK_MIDDLEWARE:-}
     restart: unless-stopped
     networks:
       - homelab
