@@ -22,6 +22,7 @@ services:
       - "traefik.http.routers.${HOME_ASSISTANT_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${HOME_ASSISTANT_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${HOME_ASSISTANT_CONTAINER_NAME}.loadbalancer.server.port=${HOME_ASSISTANT_HOST_PORT}"
+      ###### FOR SSO-  SUPPORTED BY AUTHENTIK - https://docs.goauthentik.io/integrations/services/home-assistant/
     networks:
       - zwave
     # depends_on:

@@ -18,8 +18,9 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-  # file:
-  #   filename: /config.yml
+  file:
+    filename: /config.yml
+    watch: true
 certificatesResolvers:
   netlify:
     acme:

@@ -13,4 +13,5 @@ networks:
     driver: bridge
     name: home-media-docker_default
   zwave:
+  zauthentik:
   zbookstack:

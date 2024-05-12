@@ -11,6 +11,7 @@ name: home-media-docker
 include:
   ####### NETWORK STUFF ########
   - ./compose-files/traefik-compose.yml
+  - ./compose-files/authentik.yml
   - ./compose-files/vpn.yml
   - ./compose-files/transmission.yml ##  --profile vpn
   - ./compose-files/duplicati.yml ## --profile vpn
