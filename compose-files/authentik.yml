@@ -21,7 +21,6 @@ services:
     profiles:
       - all
       - authentik
-      - traefik
 
   redis:
     image: docker.io/library/redis:alpine
@@ -40,7 +39,6 @@ services:
     profiles:
       - all
       - authentik
-      - traefik
 
   authentik-server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-latest}
@@ -82,7 +80,6 @@ services:
     profiles:
       - all
       - authentik
-      - traefik
 
   worker:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-latest}
@@ -116,4 +113,3 @@ services:
     profiles:
       - all
       - authentik
-      - traefik
