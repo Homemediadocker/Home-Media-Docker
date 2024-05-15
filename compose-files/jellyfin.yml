@@ -10,8 +10,8 @@ services:
       # - JELLYFIN_PublishedServerUrl="${JELLYFIN_CONTAINER_NAME}.${PROJECT_HOSTNAME}" #optional
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jellyfin:/config
-      - ${LOCAL_TV_PATH}:/media/Synology/Television # Media directory
-      - ${LOCAL_MOVIES_PATH}:/media/Synology/Movies # Media directory
+      - ${LOCAL_TV_PATH}:/Television # Media directory
+      - ${LOCAL_MOVIES_PATH}:/Movies # Media directory
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl # Add SSL Certs to this directory
     labels:
       - "traefik.enable=true"

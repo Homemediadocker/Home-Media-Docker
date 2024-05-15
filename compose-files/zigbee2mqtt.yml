@@ -17,4 +17,4 @@ services:
       - all
     devices:
       # Make sure this matched your adapter location
-      - ${ZIGBEE_STICK_DEVICE_PATH}:/dev/ttyACM0
+      - ${ZIGBEE_STICK_DEVICE_PATH:-/path/to/device}:/dev/ttyACM0
