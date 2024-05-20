@@ -23,7 +23,7 @@ services:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Mealie/app:/app/data/
     environment:
       # Set Backend ENV Variables Here
-      ALLOW_SIGNUP: ${MEALIE_ALLOW_SIGNUP:-true}
+      ALLOW_SIGNUP: ${MEALIE_ALLOW_SIGNUP:-false}
       PUID: ${UID}
       PGID: ${GID}
       TZ: ${TIMEZONE}
