@@ -48,3 +48,6 @@ include:
   - ./compose-files/homeassistant.yml
   - ./compose-files/zwavejs.yml
   - ./compose-files/zigbee2mqtt.yml
+
+  ######## FAMILY STUFF ###################
+  - ./compose-files/mealie.yml

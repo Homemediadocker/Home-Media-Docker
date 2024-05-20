@@ -9,6 +9,7 @@ networks:
           gateway: ${PIHOLE_NETWORK_GATEWAY} #update if needed
   homelab:
     driver: bridge
+  mealie:
   default:
     driver: bridge
     name: home-media-docker_default

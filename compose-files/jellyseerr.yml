@@ -6,7 +6,7 @@ services:
     environment:
       - LOG_LEVEL=${JELLYSEER_LOG_LEVEL}
       - TZ=${TIMEZONE}
-      - JELLYFIN_TYPE=${JELLYSEER_TYPE} # if using emby
+      - JELLYFIN_TYPE=${JELLYSEER_TYPE:-jellyfin} # default is jellyfin, but can do jellyfin|emby|plex
     ports:
       - ${JELLYSEERR_HOST_PORT}:5055
     volumes:

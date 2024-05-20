@@ -25,9 +25,9 @@ services:
     restart: unless-stopped
     depends_on:
       - vpn
-      - prowlarr
-      - sonarr
-      - radarr
+      # - prowlarr
+      # - sonarr
+      # - radarr
     profiles:
       - all
       - transmission
