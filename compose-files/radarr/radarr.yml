@@ -1,0 +1,32 @@
+services:
+  ############ Media PVR Management - MOVIES ############
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: ${RADARR_CONTAINER_NAME}
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Radarr:/config
+      - ${LOCAL_MOVIES_PATH}:/movies # optional but needed to map external data
+      - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
+    ports:
+      - ${RADARR_HOST_PORT}:7878
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}.rule=Host(`${RADARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${RADARR_CONTAINER_NAME}.loadbalancer.server.port=7878"
+      ## Middlewares
+      - ${RADARR_AUTHENTIK_MIDDLEWARE:-}
+    restart: unless-stopped
+    networks:
+      - homelab
+    profiles:
+      - all
+      - radarr

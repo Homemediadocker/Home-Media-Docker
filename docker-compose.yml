@@ -10,44 +10,45 @@
 name: home-media-docker
 include:
   ####### NETWORK STUFF ########
-  - ./compose-files/traefik-compose.yml
-  - ./compose-files/authentik.yml
-  - ./compose-files/vpn.yml
-  - ./compose-files/transmission.yml ##  --profile vpn
-  - ./compose-files/duplicati.yml ## --profile vpn
-  - ./compose-files/pihole.yml ## --profile vpn
+  - ./compose-files/traefik/traefik-compose.yml
+  - ./compose-files/authentik/authentik.yml
+  - ./compose-files/vpn/vpn.yml
+  - ./compose-files/transmission/transmission.yml ##  --profile vpn
+  - ./compose-files/duplicati/duplicati.yml ## --profile vpn
+  - ./compose-files/pihole/pihole.yml ## --profile vpn
 
   ####### NOTES ########
-  - ./compose-files/bookstack.yml
+  - ./compose-files/bookstack/bookstack.yml
 
   ####### CONTAINER MANAGEMENT ########
-  - ./compose-files/portainer.yml
+  - ./compose-files/portainer/portainer.yml
 
   ####### MEDIA CONSUMPTION ########
-  - ./compose-files/emby.yml ## --profile emby
-  - ./compose-files/plex.yml ## --profile plex
-  - ./compose-files/jellyfin.yml ## --profile jellyfin
-  - ./compose-files/komga.yml
+  - ./compose-files/emby/emby.yml ## --profile emby
+  - ./compose-files/plex/plex.yml ## --profile plex
+  - ./compose-files/jellyfin/jellyfin.yml ## --profile jellyfin
+  - ./compose-files/komga/komga.yml
 
   ####### MEDIA MANAGEMENT ########
-  - ./compose-files/jellyseerr.yml
-  - ./compose-files/sonarr.yml
-  - ./compose-files/radarr.yml
-  - ./compose-files/prowlarr.yml
-  - ./compose-files/jackett.yml ## --profile jackett
+  - ./compose-files/jellyseerr/jellyseerr.yml
+  - ./compose-files/sonarr/sonarr.yml
+  - ./compose-files/radarr/radarr.yml
+  - ./compose-files/prowlarr/prowlarr.yml
+  - ./compose-files/jackett/jackett.yml ## --profile jackett
 
   ####### DASHBOARDS ########
-  - ./compose-files/dashy.yml
-  - ./compose-files/heimdall.yml ## --profile heimdall
+  - ./compose-files/dashy/dashy.yml
+  - ./compose-files/heimdall/heimdall.yml ## --profile heimdall
 
   ####### DOCKER VOLUMES AND NETWORK CONFIG ########
   - ./compose-files/optional-mounted-volumes.yml
   - ./compose-files/networks.yml
 
   ######## HOME AUTOMATION CONTAINERS #############
-  - ./compose-files/homeassistant.yml
-  - ./compose-files/zwavejs.yml
-  - ./compose-files/zigbee2mqtt.yml
+  - ./compose-files/homeassistant/homeassistant.yml
+  - ./compose-files/zwavejs/zwavejs.yml
+  - ./compose-files/zigbee2mqtt/zigbee2mqtt.yml
 
   ######## FAMILY STUFF ###################
-  - ./compose-files/mealie.yml
+  - ./compose-files/mealie/mealie.yml
+  - ./compose-files/mattermost/mattermost.yml

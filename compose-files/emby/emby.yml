@@ -1,0 +1,53 @@
+services:
+  ############ Media Consumption ############
+
+  ## NOTE - DON'T RUN EMBY AND JELLYFIN AT THE SAME TIME! THEY WILL HAVE PORT CONFLICTS!
+  emby:
+    image: lscr.io/linuxserver/emby:latest
+    container_name: ${EMBY_CONTAINER_NAME}
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+      # - NVIDIA_VISIBLE_DEVICES=all
+      # - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Emby:/config # Configuration directory
+      # - ./images/logowhite.png:/app/emby/system/dashboard-ui/modules/logoscreensaver/logowhite.png ## Uncomment and create your own logo in the image directory to customize your server
+      # - ./images/logowhite.png:/app/emby/system/dashboard-ui/modules/themes/logowhite.png ## Uncomment and create your own logo in the image directory to customize your server
+      # - ./images/logodark.png:/app/emby/system/dashboard-ui/modules/themes/logodark.png ## Uncomment and create your own logo in the image directory to customize your server
+      - ${LOCAL_TV_PATH}:/media/Synology/Television # Media directory
+      - ${LOCAL_MOVIES_PATH}:/media/Synology/Movies # Media directory
+      - ${LOCAL_BACKUPS_PATH}:/media/Synology/Backups #Backups Directory
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/ssl:/ssl # Add SSL Certs to this directory
+    ports:
+      - ${EMBY_HOST_PORT}:8096 #http port
+      - ${EMBY_HOST_PORT_SSL}:8920 #ssl port
+    # runtime: nvidia # Expose NVIDIA GPUs if any (Apple Silicon does not use this)
+    # network_mode: host # Enable DLNA and Wake-on-Lan
+    # devices:
+    # - /dev/dri:/dev/dri # VAAPI/NVDEC/NVENC render nodes, enable for NVIDIA Too i think?
+    # - /dev/nvidia-uvm:/dev/nvidia-uvm # Added nvidia devices here
+    # - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools # Added nvidia devices here
+    # - /dev/nvidia-modeset:/dev/nvidia-modeset # Added nvidia devices here
+    # - /dev/nvidiactl:/dev/nvidiactl # Added nvidia devices here
+    # - /dev/nvidia0:/dev/nvidia0 # Added nvidia devices here
+    # - /dev/nvidia1:/dev/nvidia1 # Added nvidia devices here (i have a 2nd GPU so i needed this too)
+    # - /dev/vchiq:/dev/vchiq # MMAL/OMX on Raspberry Pi
+    # - /dev/video10:/dev/video10 #optional other video cards
+    # - /dev/video11:/dev/video11 #optional
+    # - /dev/video12:/dev/video12 #optional
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.rule=Host(`${EMBY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${EMBY_CONTAINER_NAME}.loadbalancer.server.port=${EMBY_HOST_PORT}"
+    networks:
+      - homelab
+    profiles:
+      - emby

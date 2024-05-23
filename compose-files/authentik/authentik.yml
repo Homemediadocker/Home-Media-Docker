@@ -1,0 +1,116 @@
+services:
+  postgresql:
+    image: docker.io/library/postgres:12-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Authentik/db:/var/lib/postgresql/data
+    networks:
+      - zauthentik
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
+      POSTGRES_USER: ${PG_USER:-authentik}
+      POSTGRES_DB: ${PG_DB:-authentik}
+    env_file:
+      - ./.env
+      - ../../.env
+    profiles:
+      - all
+      - authentik
+
+  redis:
+    image: docker.io/library/redis:alpine
+    command: --save 60 1 --loglevel warning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Authentik/redis:/data
+    networks:
+      - zauthentik
+    profiles:
+      - all
+      - authentik
+
+  authentik-server:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-latest}
+    container_name: authentik-server
+    restart: unless-stopped
+    command: server
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      # AUTHENTIK_HOST: http://authentik.${PROJECT_HOSTNAME}
+      AUTHENTIK_HOST_BROWSER: https://authentik.${PROJECT_HOSTNAME}
+
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Authentik/media:/media
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Authentik/custom-templates:/templates
+    networks:
+      - zauthentik
+      - homelab
+    env_file:
+      - ./.env
+      - ../../.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=home-media-docker_homelab"
+      - "traefik.http.routers.authentik-server.rule=Host(`authentik.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.authentik-server.entrypoints=https"
+      - "traefik.http.routers.authentik-server.tls=true"
+      - "traefik.http.routers.authentik-server.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      - "traefik.http.routers.authentik-server.service=authentik-svc"
+      - "traefik.http.services.authentik-svc.loadBalancer.server.port=8000"
+    depends_on:
+      - postgresql
+      - redis
+      - traefik
+    profiles:
+      - all
+      - authentik
+
+  worker:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-latest}
+    restart: unless-stopped
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+    # `user: root` and the docker socket volume are optional.
+    # See more for the docker socket integration here:
+    # https://goauthentik.io/docs/outposts/integrations/docker
+    # Removing `user: root` also prevents the worker from fixing the permissions
+    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
+    # (1000:1000 by default)
+    user: root
+    networks:
+      - zauthentik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Authentik/media:/media
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Authentik/certs:/certs
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Authentik/custom-templates:/templates
+    env_file:
+      - ./.env
+      - ../../.env
+    depends_on:
+      - postgresql
+      - redis
+    profiles:
+      - all
+      - authentik
