@@ -13,7 +13,7 @@ services:
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Radarr:/config
       - ${LOCAL_MOVIES_PATH}:/movies # optional but needed to map external data
-      - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
+      - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads # optional but needed to map external data
     ports:
       - ${RADARR_HOST_PORT}:7878
     labels:

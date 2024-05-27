@@ -13,7 +13,7 @@ services:
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Sonarr:/config
       - ${LOCAL_TV_PATH}:/tv # optional but needed to map external data
-      - ${LOCAL_DOWNLOADS_PATH}:/downloads # optional but needed to map external data
+      - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads # optional but needed to map external data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"

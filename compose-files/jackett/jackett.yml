@@ -13,7 +13,7 @@ services:
       - RUN_OPTS=${JACKETT_RUN_OPTS} #optional
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jackett:/config
-      - ${LOCAL_DOWNLOADS_PATH}:/downloads
+      - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads
     ports:
       - ${JACKETT_HOST_PORT}:9117
     restart: unless-stopped

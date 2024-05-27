@@ -20,7 +20,7 @@ services:
       - HOST_WHITELIST=${TRANSMISSION_HOST_WHITELIST} #optional
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Transmission:/config
-      - ${LOCAL_DOWNLOADS_PATH}:/downloads
+      - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads
     # ports: ### Ports are not allowed when network_mode: is service:vpn
     #   - 9091:9091 # webui
     #   - 51413:51413 # for seed discovery - greatly improves performance even if not seeding

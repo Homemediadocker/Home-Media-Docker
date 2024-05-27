@@ -24,11 +24,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - run: chmod +x ./scripts/copyenv.sh && ./scripts/copyenv.sh
+      - run: chmod +x ./scripts/copyenv.sh && ./scripts/copyenv.sh && export COMPOSE_PROFILES=all,emby
       - uses: isbang/compose-action@v1.5.1
         with:
           compose-file: "./docker-compose.yml"
-          compose-flags: "--profile emby"
 
       # Runs a single command using the runners shell
       # - name: Run a one-line script
