@@ -26,7 +26,7 @@ jobs:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4  
       - name: Copy Environment File
-        run: cp .env-example .env
+        run: chmod +x ./scripts/copyenv.sh && ./scripts/copyenv.sh
       - name: Run startup.sh (no media server)
         run: chmod +x ./scripts/startup.sh && ./scripts/startup.sh 
       - name: Teardown Environment - Stop Containers
