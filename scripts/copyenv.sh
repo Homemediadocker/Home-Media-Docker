@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ ! -f .env ]; then
   echo "Global .env not found - Creating global .env file"
-  cp .env-example .env-test
+  cp .env-example .env
 fi
 
 
