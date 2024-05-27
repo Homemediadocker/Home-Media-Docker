@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Sourcing Environment Variables from .env file"
-set -a; source ../.env; set +a
+set -a; source .env; set +a
 
 if [ -z "$1" ]
   then
