@@ -28,7 +28,7 @@ jobs:
       - name: Copy Environment File
         run: chmod +x ./scripts/copyenv.sh && ./scripts/copyenv.sh
       - name: Run startup.sh (no media server)
-        run: chmod +x ./scripts/startup.sh && ./scripts/startup.sh 
+        run: chmod +x ./scripts/copyenv.sh && ./scripts/copyenv.sh && chmod +x ./scripts/startup.sh && ./scripts/startup.sh 
       - name: Teardown Environment - Stop Containers
         run: docker stop $(docker ps -a --filter "name=vpn" -q) portainer komga sonarr radarr prowlarr jellyseerr transmission duplicati
       - name: Teardown Environment - Remove Containers
