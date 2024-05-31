@@ -53,3 +53,6 @@ include:
   - ./compose-files/mealie/mealie.yml
   - ./compose-files/mattermost/mattermost.yml
   - ./compose-files/wallos/wallos.yml
+
+  ######## PASSWORD MANAGER ###################
+  - ./compose-files/vaultwarden/vaultwarden.yml
