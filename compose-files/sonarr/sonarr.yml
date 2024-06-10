@@ -1,0 +1,35 @@
+services:
+  ############ Media PVR Management - TV SHOWS############
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: ${SONARR_CONTAINER_NAME}
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Sonarr:/config
+      - ${LOCAL_TV_PATH}:/tv # optional but needed to map external data
+      - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads # optional but needed to map external data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
+      ## Middlewares
+      - ${SONARR_AUTHENTIK_MIDDLEWARE:-}
+    ports:
+      - ${SONARR_HOST_PORT}:8989
+      - ${SONARR_HOST_PORT_SSL}:9898 # ssl port if you enable it
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+    networks:
+      - homelab
+    profiles:
+      - all
+      - sonarr

@@ -1,0 +1,35 @@
+services:
+  ############# DASHY IS THE GO TO DASHBOARD FOR THIS PROJECT ##################
+  dashy:
+    image: lissy93/dashy
+    container_name: ${DASHY_CONTAINER_NAME}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Dashy:/app/user-data
+      - ${DASHY_CONFIG_LOCATION}:/app/user-data/conf.yml # starter config for all the stuff in this docker compose
+    ports:
+      - ${DASHY_HOST_HTTP_PORT}:8080
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - NODE_ENV=production # needed for optimized container image
+      - UID=${UID}
+      - GID=${GID}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.rule=Host(`${DASHY_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${DASHY_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${DASHY_CONTAINER_NAME}.loadbalancer.server.port=${DASHY_HOST_HTTP_PORT}"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "/app/services/healthcheck"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    profiles:
+      - all
+      - dashy
+    networks:
+      - homelab

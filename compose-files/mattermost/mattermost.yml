@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:${POSTGRES_IMAGE_TAG}
+    container_name: mattermost-db
+    restart: ${RESTART_POLICY}
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 100
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+    volumes:
+      - ${POSTGRES_DATA_PATH}:/var/lib/postgresql/data
+    profiles:
+      - all
+      - mattermost
+    env_file:
+      - ./.env
+      - ../../.env
+    networks:
+      - mattermost_default
+
+  mattermost:
+    image: mattermost/${MATTERMOST_IMAGE}:${MATTERMOST_IMAGE_TAG}
+    container_name: ${MATTERMOST_CONTAINER_NAME:-mattermost}
+    depends_on:
+      - postgres
+    restart: ${RESTART_POLICY}
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 200
+    read_only: ${MATTERMOST_CONTAINER_READONLY}
+    tmpfs:
+      - /tmp
+    profiles:
+      - all
+      - mattermost
+    volumes:
+      - ${MATTERMOST_CONFIG_PATH}:/mattermost/config:rw
+      - ${MATTERMOST_DATA_PATH}:/mattermost/data:rw
+      - ${MATTERMOST_LOGS_PATH}:/mattermost/logs:rw
+      - ${MATTERMOST_PLUGINS_PATH}:/mattermost/plugins:rw
+      - ${MATTERMOST_CLIENT_PLUGINS_PATH}:/mattermost/client/plugins:rw
+      - ${MATTERMOST_BLEVE_INDEXES_PATH}:/mattermost/bleve-indexes:rw
+    env_file:
+      - ./.env
+      - ../../.env
+    networks:
+      - mattermost_default
+      - homelab
+    labels:
+      - traefik.enable=true
+      - "traefik.docker.network=home-media-docker_homelab"
+      - traefik.http.routers.mattermost.rule=Host(`${MATTERMOST_CONTAINER_NAME:-mattermost}.${PROJECT_HOSTNAME}`)
+      - traefik.http.services.mattermost.loadbalancer.server.port=${APP_PORT}
+      - traefik.http.routers.mattermost.tls=true
+      - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=500000000 # optional, only necessary for file uploads; allow 500MB
+      - traefik.http.middlewares.limit.buffering.maxResponseBodyBytes=500000000 # optional, only necessary for file uploads; allow 500MB
+      - traefik.http.middlewares.limit.buffering.memRequestBodyBytes=500000000 # optional, only necessary for file uploads; allow 500MB
+      - traefik.http.middlewares.limit.buffering.memResponseBodyBytes=500000000 # optional, only necessary for file uploads; allow 500MB
+    #  # Part for optional traefik middlewares
+    #  - traefik.http.routers.mattermost.middlewares=local-ipwhitelist@file

@@ -1,0 +1,61 @@
+services:
+  bookstack:
+    image: lscr.io/linuxserver/bookstack
+    container_name: ${BOOKSTACK_APP_CONTAINER_NAME}
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - APP_URL=${BOOKSTACK_APP_URL}
+      - DB_HOST=${BOOKSTACK_DB_HOST}
+      - DB_PORT=${BOOKSTACK_DB_PORT}
+      - DB_USER=${BOOKSTACK_DB_USER}
+      - DB_PASS=${BOOKSTACK_DB_PASS}
+      - DB_DATABASE=${BOOKSTACK_DB_NAME}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/app:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.rule=Host(`${BOOKSTACK_APP_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.tls=true"
+      - "traefik.http.middlewares.${BOOKSTACK_APP_CONTAINER_NAME}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.middlewares=${BOOKSTACK_APP_CONTAINER_NAME}-https-redirect"
+      - "traefik.http.routers.${BOOKSTACK_APP_CONTAINER_NAME}.service=${BOOKSTACK_APP_CONTAINER_NAME}"
+      - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.port=80" # linuxserver image exposes port 80 and 443
+      # - "traefik.http.services.${BOOKSTACK_APP_CONTAINER_NAME}.loadbalancer.server.url=http://${BOOKSTACK_APP_CONTAINER_NAME}:${BOOKSTACK_WEB_HOST_HTTP_PORT}" #komga in the url here is the service name which cannot be dynamic --- komga requires a url with a port in it for access
+
+      ###### FOR AUTHENTIK SUPPORT BOOKSTACK USES SAML - https://docs.goauthentik.io/integrations/services/bookstack/
+    restart: unless-stopped
+    depends_on:
+      - ${BOOKSTACK_DB_CONTAINER_NAME}
+    networks:
+      - homelab
+      - zbookstack
+    profiles:
+      - all
+      - bookstack
+  bookstack_db:
+    image: lscr.io/linuxserver/mariadb
+    container_name: ${BOOKSTACK_DB_CONTAINER_NAME}
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - MYSQL_ROOT_PASSWORD=${BOOKSTACK_DB_ROOT_PASS}
+      - TZ=${TIMEZONE}
+      - MYSQL_DATABASE=${BOOKSTACK_DB_NAME}
+      - MYSQL_USER=${BOOKSTACK_DB_USER}
+      - MYSQL_PASSWORD=${BOOKSTACK_DB_PASS}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bookstack/db:/config
+    restart: unless-stopped
+    networks:
+      - zbookstack
+    profiles:
+      - all
+      - bookstack

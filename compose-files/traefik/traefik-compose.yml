@@ -1,0 +1,52 @@
+services:
+  traefik:
+    image: traefik:v3.0
+    container_name: ${TRAEFIK_CONTAINER_NAME}
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - homelab
+    ports:
+      - 80:80
+      - 443:443/tcp
+      - 443:443/udp # Uncomment if you want HTTP3
+      - ${TRAEFIK_DASHBOARD_PORT}:8080
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      # CF_DNS_API_TOKEN_FILE: /run/secrets/cf_api_token # note using _FILE for docker secrets
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
+      TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
+      NETLIFY_TOKEN: ${TRAEFIK_NETLIFY_TOKEN}
+    # secrets:
+    #   - cf_api_token
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ../../traefik-data/traefik.yml:/traefik.yml:ro
+      - ../../traefik-data/acme.json:/acme.json
+      - ../../traefik-data/config.yml:/config.yml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=home-media-docker_homelab"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.entrypoints=http"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      # - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.entrypoints=https"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.rule=Host(`${TRAEFIK_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      # - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls=true"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.domains[0].main=${PROJECT_HOSTNAME}"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.domains[0].sans=*.${PROJECT_HOSTNAME}"
+      - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.service=api@internal"
+      ## Middlewares
+      - ${TRAEFIK_DASHBOARD_AUTHENTIK_MIDDLEWARE:-}
+    profiles:
+      - all
+      - traefik

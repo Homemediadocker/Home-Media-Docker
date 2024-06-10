@@ -1,0 +1,21 @@
+services:
+  jackett: # This is an option if Prowlarr doesn't work correctly
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: ${JACKETT_CONTAINER_NAME}
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+      - AUTO_UPDATE=${JACKETT_AUTO_UPDATE} #optional
+      - RUN_OPTS=${JACKETT_RUN_OPTS} #optional
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Jackett:/config
+      - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads
+    ports:
+      - ${JACKETT_HOST_PORT}:9117
+    restart: unless-stopped
+    profiles:
+      - jackett

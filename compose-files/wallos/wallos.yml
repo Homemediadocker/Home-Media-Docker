@@ -1,0 +1,19 @@
+services:
+  wallos:
+    container_name: ${WALLOS_CONTAINER_NAME:-wallos}
+    image: bellamy/wallos:latest
+    ports:
+      - "${WALLOS_HOST_PORT:-8282}:80/tcp"
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      TZ: ${TIMEZONE}
+    # Volumes store your data between container upgrades
+    volumes:
+      - "${DEFAULT_CONTAINER_DATA_LOCATION}/Wallos/db:/var/www/html/db"
+      - "${DEFAULT_CONTAINER_DATA_LOCATION}/Wallos/logos:/var/www/html/images/uploads/logos"
+    restart: unless-stopped
+    profiles:
+      - all
+      - wallos
