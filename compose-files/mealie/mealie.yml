@@ -35,11 +35,11 @@ services:
       BASE_URL: https://${MEALIE_CONTAINER_NAME}.${PROJECT_HOSTNAME}
       # Database Settings
       DB_ENGINE: ${MEALIE_DB_ENGINE:-postgres}
+      POSTGRES_DB: ${MEALIE_DB_NAME:-mealie-postgres}
       POSTGRES_USER: ${MEALIE_DB_USER:-mealie}
       POSTGRES_PASSWORD: ${MEALIE_DB_PASSWORD:-mealie}
       POSTGRES_SERVER: ${MEALIE_POSTGRES_CONTAINER_NAME:-mealie-postgres}
       POSTGRES_PORT: 5432
-      POSTGRES_DB: ${MEALIE_DB_NAME:-mealie}
       SMTP_HOST: ${MEALIE_SMTP_HOST}
       SMTP_FROM_EMAIL: ${MEALIE_SMTP_FROM_EMAIL}
       SMTP_USER: ${MEALIE_SMTP_USER}
@@ -63,8 +63,9 @@ services:
       - ./.env
       - ../../.env
     environment:
-      POSTGRES_PASSWORD: ${MEALIE_DB_PASSWORD:-mealie}
+      POSTGRES_DB: ${MEALIE_DB_NAME:-mealie-postgres}
       POSTGRES_USER: ${MEALIE_DB_USER:-mealie}
+      POSTGRES_PASSWORD: ${MEALIE_DB_PASSWORD:-mealie}
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 30s
