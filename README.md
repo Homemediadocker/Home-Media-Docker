@@ -23,8 +23,6 @@ This is using Github Actions to build on each push to this repo. I am executing 
 
 - [Docs Site](https://Homemediadocker.github.io/Home-Media-Docker/) has moved to a dedicated page - Docusaurus and searchable.
 
-- TODO: Add Traefik and Authentik notes to the docs
-
 ## OTHER NOTES
 
 - The system data will be placed in this project directory by default if you change nothing
