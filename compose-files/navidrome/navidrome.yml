@@ -1,0 +1,31 @@
+services:
+  navidrome:
+    container_name: ${NAVIDROME_CONTAINER_NAME:-navidrome}
+    image: deluan/navidrome:latest
+    ports:
+      - "${NAVIDROME_HOST_PORT:-4533}:4533"
+    env_file:
+      - ./.env
+      - ../../.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${NAVIDROME_CONTAINER_NAME}.rule=Host(`${NAVIDROME_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${NAVIDROME_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${NAVIDROME_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${NAVIDROME_CONTAINER_NAME}.loadbalancer.server.port=${NAVIDROME_HOST_PORT}"
+      ## Middlewares
+      - ${NAVIDROME_AUTHENTIK_MIDDLEWARE:-}
+    environment:
+      # Optional: put your config options customization here. Examples:
+      ND_SCANSCHEDULE: ${NAVIDROME_SCANSCHEDULE:-1h}
+      ND_LOGLEVEL: ${NAVIDROME_LOG_LEVEL:-info}  
+      ND_BASEURL: "${NAVIDROME_BASEURL:-}"
+      ND_ENABLESHARING: ${NAVIDROME_ENABLE_SHARING:-false}
+    networks:
+      - homelab
+    volumes:
+      - "${DEFAULT_CONTAINER_DATA_LOCATION}/Navidrome:/data"
+      - "${LOCAL_MUSIC_PATH:-../lidarr/.local/music}:/music:ro"
+    profiles:
+      - navidrome
+      - all
