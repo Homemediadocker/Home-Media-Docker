@@ -8,6 +8,8 @@
 .env
 .env.local
 
+**/.local
+
 output
 
 ## Images

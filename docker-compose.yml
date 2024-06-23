@@ -28,11 +28,13 @@ include:
   - ./compose-files/plex/plex.yml ## --profile plex
   - ./compose-files/jellyfin/jellyfin.yml ## --profile jellyfin
   - ./compose-files/komga/komga.yml
+  - ./compose-files/navidrome/navidrome.yml
 
   ####### MEDIA MANAGEMENT ########
   - ./compose-files/jellyseerr/jellyseerr.yml
   - ./compose-files/sonarr/sonarr.yml
   - ./compose-files/radarr/radarr.yml
+  - ./compose-files/lidarr/lidarr.yml
   - ./compose-files/prowlarr/prowlarr.yml
   - ./compose-files/jackett/jackett.yml ## --profile jackett
 

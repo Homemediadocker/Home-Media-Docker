@@ -1,0 +1,33 @@
+services:
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: ${LIDARR_CONTAINER_NAME:-lidarr}
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=${TIMEZONE}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${LIDARR_CONTAINER_NAME}.rule=Host(`${LIDARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${LIDARR_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${LIDARR_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${LIDARR_CONTAINER_NAME}.loadbalancer.server.port=${LIDARR_HOST_PORT}"
+      ## Middlewares
+      - ${LIDARR_AUTHENTIK_MIDDLEWARE:-}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Lidarr:/config
+      - ${LOCAL_MUSIC_PATH:-./.local/music}:/music #optional
+      - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads #optional
+    ports:
+      - ${LIDARR_HOST_PORT:-8686}:8686
+    restart: unless-stopped
+    networks:
+      - homelab
+    depends_on:
+      - prowlarr
+    profiles:
+      - lidarr
+      - all
