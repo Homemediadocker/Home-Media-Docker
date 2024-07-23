@@ -17,8 +17,8 @@ services:
       - ../../.env
     environment:
       # CF_DNS_API_TOKEN_FILE: /run/secrets/cf_api_token # note using _FILE for docker secrets
+      # TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
-      TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
       NETLIFY_TOKEN: ${TRAEFIK_NETLIFY_TOKEN}
     # secrets:
     #   - cf_api_token
