@@ -19,6 +19,7 @@ services:
       - "traefik.http.routers.${MEALIE_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${MEALIE_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${MEALIE_CONTAINER_NAME}.loadbalancer.server.port=9000"
+      - ${MEALIE_AUTHENTIK_MIDDLEWARE:-}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Mealie/app:/app/data/
     env_file:

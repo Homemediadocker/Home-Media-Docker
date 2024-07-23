@@ -1,0 +1,33 @@
+services:
+  firefox:
+    image: lscr.io/linuxserver/firefox:latest
+    container_name: firefox
+    security_opt:
+      - seccomp:unconfined #optional
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TIMEZONE}
+#      - FIREFOX_CLI=https://www.linuxserver.io/ #optional
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Firefox:/config
+    ports:
+      - 3000:3000
+      - 3001:3001
+    shm_size: "1gb"
+    restart: unless-stopped
+    profiles:
+      - all
+      - firefox
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.firefox.rule=Host(`firefox.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.firefox.entrypoints=https"
+      - "traefik.http.routers.firefox.tls=true"
+      - "traefik.http.services.firefox.loadbalancer.server.port=3000"
+      - ${FIREFOX_AUTHENTIK_MIDDLEWARE:-}
+    networks:
+      - homelab

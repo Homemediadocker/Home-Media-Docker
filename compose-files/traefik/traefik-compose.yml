@@ -46,7 +46,7 @@ services:
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.tls.domains[0].sans=*.${PROJECT_HOSTNAME}"
       - "traefik.http.routers.${TRAEFIK_CONTAINER_NAME}-secure.service=api@internal"
       ## Middlewares
-      - ${TRAEFIK_DASHBOARD_AUTHENTIK_MIDDLEWARE:-}
+      - ${TRAEFIK_AUTHENTIK_MIDDLEWARE:-}
     profiles:
       - all
       - traefik

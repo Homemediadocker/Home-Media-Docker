@@ -16,6 +16,7 @@ include:
   - ./compose-files/transmission/transmission.yml ##  --profile vpn
   - ./compose-files/duplicati/duplicati.yml ## --profile vpn
   - ./compose-files/pihole/pihole.yml ## --profile vpn
+  - ./compose-files/firefox/firefox.yml ## local browser
 
   ####### NOTES ########
   - ./compose-files/bookstack/bookstack.yml
