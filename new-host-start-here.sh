@@ -6,7 +6,7 @@ apt-get dist-upgrade -y
 
 sleep 5
 
-echo "########## UNINSTALLING THE PRE-INSTALLED DOCKER/SNAPD #############"
+echo "########## UNINSTALLING THE PRE-INSTALLED DOCKER #############"
 apt-get purge -y docker-engine docker docker.io docker-ce
 apt-get autoremove -y --purge docker-engine docker docker.io docker-ce
 umount /var/lib/docker/
