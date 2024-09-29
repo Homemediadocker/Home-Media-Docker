@@ -6,6 +6,18 @@ apt-get dist-upgrade -y
 
 sleep 5
 
+echo "########## UNINSTALLING THE PRE-INSTALLED DOCKER/SNAPD #############"
+apt-get purge -y docker-engine docker docker.io docker-ce
+apt-get autoremove -y --purge docker-engine docker docker.io docker-ce
+umount /var/lib/docker/
+rm -rf /var/lib/docker /etc/docker
+rm /etc/apparmor.d/docker
+groupdel docker
+rm -rf /var/run/docker.sock
+rm -rf /usr/bin/docker-compose
+
+sleep 5
+
 echo "SETTING UP DOCKER AND FETCHING PACKAGES"
 apt-get install ca-certificates curl git
 install -m 0755 -d /etc/apt/keyrings
