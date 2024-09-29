@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocker_docs=self.webpackChunkdocker_docs||[]).push([[2728],{5242:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/Home-Media-Docker/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
