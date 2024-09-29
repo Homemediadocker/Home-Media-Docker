@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocker_docs=self.webpackChunkdocker_docs||[]).push([[1903],{1912:e=>{e.exports=JSON.parse('{"blogBasePath":"/Home-Media-Docker/blog","blogTitle":"Blog","authorsListPath":"/Home-Media-Docker/blog/authors"}')}}]);
