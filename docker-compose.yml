@@ -52,6 +52,9 @@ include:
   - ./compose-files/zwavejs/zwavejs.yml
   - ./compose-files/zigbee2mqtt/zigbee2mqtt.yml
 
+  ######### OTHER HOME CONTAINERS ###############
+  - ./compose-files/homebox/homebox.yml
+
   ######## FAMILY STUFF ###################
   - ./compose-files/mealie/mealie.yml
   - ./compose-files/mattermost/mattermost.yml
