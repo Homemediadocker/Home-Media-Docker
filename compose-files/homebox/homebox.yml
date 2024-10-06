@@ -1,0 +1,29 @@
+services:
+  homebox:
+    image: ghcr.io/sysadminsmedia/homebox:latest
+    #   image: ghcr.io/sysadminsmedia/homebox:latest-rootless
+    container_name: ${HOMEBOX_CONTAINER_NAME:-homebox}
+    restart: unless-stopped
+    env_file:
+      - ./.env
+      - ../../.env
+    environment:
+      - HBOX_LOG_LEVEL=${HOMEBOX_LOG_LEVEL}
+      - HBOX_LOG_FORMAT=${HOMEBOX_LOG_FORMAT}
+      - HBOX_WEB_MAX_UPLOAD_SIZE=${HOMEBOX_WEB_MAX_UPLOAD_SIZE}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Homebox:/data/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${HOMEBOX_CONTAINER_NAME}.rule=Host(`${HOMEBOX_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${HOMEBOX_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${HOMEBOX_CONTAINER_NAME}.tls=true"
+      - "traefik.http.services.${HOMEBOX_CONTAINER_NAME}.loadbalancer.server.port=${HOMEBOX_HOST_PORT}"
+      ## Middlewares
+      - ${HOMEBOX_AUTHENTIK_MIDDLEWARE:-}
+    ports:
+      - ${HOMEBOX_HOST_PORT}:7745
+    profiles:
+      - all
+      - homebox
