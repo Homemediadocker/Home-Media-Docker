@@ -10,3 +10,4 @@ volumes:
       type: cifs
       o: iocharset=utf8,username=${SMB_USER},password=${SMB_PASS},uid=${SMB_UID},gid=${SMB_GID},vers=3.0
       device: ${TV_NETWORK_SHARE}
+  model-cache:
