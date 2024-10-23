@@ -73,6 +73,8 @@ services:
       - "traefik.http.routers.authentik-server.tls.certresolver=${TRAEFIK_TLS_CERTRESOLVER}"
       - "traefik.http.routers.authentik-server.service=authentik-svc"
       - "traefik.http.services.authentik-svc.loadBalancer.server.port=8000"
+      ## Middlewares
+      - ${AUTHENTIK_FAIL2BAN_MIDDLEWARE:-}
     depends_on:
       - postgresql
       - redis

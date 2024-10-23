@@ -21,6 +21,11 @@ providers:
   file:
     filename: /config.yml
     watch: true
+experimental:
+  plugins:
+    fail2ban:
+      moduleName: "github.com/tomMoulard/fail2ban"
+      version: "v0.8.3"
 certificatesResolvers:
   netlify:
     acme:
