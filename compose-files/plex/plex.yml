@@ -25,6 +25,8 @@ services:
       - "traefik.http.routers.${PLEX_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${PLEX_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${PLEX_CONTAINER_NAME}.loadbalancer.server.port=${PLEX_HOST_PORT}"
+      ## Middlewares
+      - ${PLEX_FAIL2BAN_MIDDLEWARE:-}
     restart: unless-stopped
     networks:
       - homelab

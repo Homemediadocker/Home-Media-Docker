@@ -15,6 +15,8 @@ services:
       - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.service=${KOMGA_CONTAINER_NAME}"
       - "traefik.http.routers.${KOMGA_CONTAINER_NAME}.rule=Host(`${KOMGA_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.services.${KOMGA_CONTAINER_NAME}.loadbalancer.server.url=http://komga:${KOMGA_HOST_PORT}" #komga in the url here is the service name which cannot be dynamic --- komga requires a url with a port in it for access
+      ## Middlewares
+      - ${KOMGA_FAIL2BAN_MIDDLEWARE:-}
     ports:
       - ${KOMGA_HOST_PORT}:25600
     user: "${UID}:${GID}"

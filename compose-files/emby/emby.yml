@@ -47,6 +47,8 @@ services:
       - "traefik.http.routers.${EMBY_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${EMBY_CONTAINER_NAME}.loadbalancer.server.port=${EMBY_HOST_PORT}"
+      ## Middlewares
+      - ${EMBY_FAIL2BAN_MIDDLEWARE:-}
     networks:
       - homelab
     profiles:
