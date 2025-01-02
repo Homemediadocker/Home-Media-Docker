@@ -28,6 +28,7 @@ services:
       - ../../traefik-data/traefik.yml:/traefik.yml:ro
       - ../../traefik-data/acme.json:/acme.json
       - ../../traefik-data/config.yml:/config.yml:ro
+      - traefik-logs:/var/log/traefik
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=home-media-docker_homelab"
@@ -50,3 +51,5 @@ services:
     profiles:
       - all
       - traefik
+volumes:
+  traefik-logs:

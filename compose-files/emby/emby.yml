@@ -48,7 +48,7 @@ services:
       - "traefik.http.routers.${EMBY_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${EMBY_CONTAINER_NAME}.loadbalancer.server.port=${EMBY_HOST_PORT}"
       ## Middlewares
-      - ${EMBY_FAIL2BAN_MIDDLEWARE:-}
+      - ${EMBY_CROWDSEC_MIDDLEWARE:-}
     networks:
       - homelab
     profiles:

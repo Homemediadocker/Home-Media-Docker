@@ -10,6 +10,7 @@
 name: home-media-docker
 include:
   ####### NETWORK STUFF ########
+  - ./compose-files/crowdsec/crowdsec.yml
   - ./compose-files/traefik/traefik-compose.yml
   - ./compose-files/authentik/authentik.yml
   - ./compose-files/vpn/vpn.yml

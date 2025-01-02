@@ -1,6 +1,6 @@
 api:
   dashboard: true
-  debug: true
+  #  debug: true
   insecure: true
 entryPoints:
   http:
@@ -10,8 +10,11 @@ entryPoints:
         entryPoint:
           to: https
           scheme: https
+      middlewares: "crowdsec-bouncer@file"
   https:
     address: ":443"
+    http:
+      middlewares: "crowdsec-bouncer@file"
 serversTransport:
   insecureSkipVerify: true
 providers:
@@ -29,7 +32,7 @@ experimental:
 certificatesResolvers:
   netlify:
     acme:
-      email: youremail@example.com
+      email: quin.carter@gmail.com
       storage: acme.json
       # caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
@@ -42,10 +45,10 @@ certificatesResolvers:
           - "1.0.0.1:53"
   cloudflare:
     acme:
-      email: youremail@example.com
+      email: quin.carter@gmail.com
       storage: acme.json
-      # caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
-      caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
+      caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
+      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
       dnsChallenge:
         provider: cloudflare
         disablePropagationCheck: true # uncomment this if you have issues pulling certificates through cloudflare, By setting this flag to true disables the need to wait for the propagation of the TXT record to all authoritative name servers.
@@ -53,3 +56,8 @@ certificatesResolvers:
         resolvers:
           - "1.1.1.1:53"
           - "1.0.0.1:53"
+log:
+  level: "INFO"
+  filePath: "/var/log/traefik/traefik.log"
+accessLog:
+  filePath: "/var/log/traefik/access.log"

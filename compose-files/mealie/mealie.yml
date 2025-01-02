@@ -19,7 +19,7 @@ services:
       - "traefik.http.routers.${MEALIE_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${MEALIE_CONTAINER_NAME}.tls=true"
       - "traefik.http.services.${MEALIE_CONTAINER_NAME}.loadbalancer.server.port=9000"
-      # - ${MEALIE_AUTHENTIK_MIDDLEWARE:-}
+#      - ${MEALIE_AUTHENTIK_MIDDLEWARE:-}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Mealie/app:/app/data/
     env_file:
@@ -46,6 +46,15 @@ services:
       SMTP_USER: ${MEALIE_SMTP_USER}
       SMTP_PASSWORD: ${MEALIE_SMTP_PASSWORD}
       OPENAI_API_KEY: ${MEALIE_OPENAI_API_KEY:-changemeapikey}
+      OIDC_AUTH_ENABLED: ${MEALIE_OIDC_AUTH_ENABLED:-false}
+      OIDC_SIGNUP_ENABLED: ${MEALIE_OIDC_SIGNUP_ENABLED:-false}
+      OIDC_CONFIGURATION_URL: ${MEALIE_OIDC_CONFIGURATION_URL:-}
+      OIDC_CLIENT_ID: ${MEALIE_OIDC_CLIENT_ID:-}
+      OIDC_CLIENT_SECRET: ${MEALIE_OIDC_CLIENT_SECRET:-}
+      OIDC_AUTO_REDIRECT: ${MEALIE_OIDC_AUTO_REDIRECT:-}
+      OIDC_REMEMBER_ME: ${MEALIE_OIDC_REMEMBER_ME:-true}
+      OIDC_USER_GROUP: ${MEALIE_OIDC_USER_GROUP:-}
+      OIDC_ADMIN_GROUP: ${MEALIE_OIDC_ADMIN_GROUP:-}
     depends_on:
       mealie-postgres:
         condition: service_healthy
