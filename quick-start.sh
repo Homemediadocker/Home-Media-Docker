@@ -75,8 +75,8 @@ current_backups_path=$(grep "^LOCAL_BACKUPS_PATH=" .env | cut -d'=' -f2 | sed 's
 # Prompt for basic configuration
 data_location=$(prompt_with_default "DEFAULT_CONTAINER_DATA_LOCATION" "Container data location" "../../.containers" "$current_data_location")
 hostname=$(prompt_with_default "PROJECT_HOSTNAME" "Project hostname" "localhost" "$current_hostname")
-uid=$(prompt_with_default "UID" "User ID (run 'id -u' to find yours)" "1000" "$current_uid")
-gid=$(prompt_with_default "GID" "Group ID (run 'id -g' to find yours)" "1000" "$current_gid")
+uid=$(prompt_with_default "UID" "User ID (run 'id -u' to find yours) (yours is $(id -u))" "1000 is default value" "$current_uid")
+gid=$(prompt_with_default "GID" "Group ID (run 'id -g' to find yours) (yours is $(id -g))" "1000 is default value" "$current_gid")
 timezone=$(prompt_with_default "TIMEZONE" "Timezone" "America/New_York" "$current_timezone")
 
 # Prompt for media paths
