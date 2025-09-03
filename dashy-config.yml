@@ -61,7 +61,7 @@ sections:
       - title: Jellyfin
         description: Media Server
         icon: hl-jellyfin
-        url: http://localhost:8096/
+        url: https://jellyfin.localhost/
         target: newtab
         statusCheck: true
         id: 1_1509_jellyfin
@@ -91,23 +91,23 @@ sections:
       - title: Sonarr
         description: TV Show Grabber
         icon: hl-sonarr
-        url: http://localhost:8989/
+        url: https://sonarr.localhost/
         target: newtab
         statusCheck: true
-        statusCheckAcceptCodes: "401"
+        statusCheckAcceptCodes: '401'
         id: 0_808_sonarr
       - title: Radarr
         description: Movie Grabber
         icon: hl-radarr
-        url: http://localhost:7878
+        url: https://radarr.localhost
         target: newtab
         statusCheck: true
-        statusCheckAcceptCodes: "401"
+        statusCheckAcceptCodes: '401'
         id: 1_808_radarr
       - title: Jellyseerr
         description: Content Request Management
         icon: hl-jellyseerr
-        url: http://localhost:5055/
+        url: https://jellyseerr.localhost/
         target: newtab
         statusCheck: true
         id: 2_808_jellyseerr
@@ -125,7 +125,7 @@ sections:
       - title: Prowlarr
         description: Web Crawler for Torrent Sites
         icon: hl-prowlarr
-        url: http://localhost:9696/
+        url: https://prowlarr.localhost/
         target: newtab
         statusCheck: true
         id: 0_1153_prowlarr
@@ -144,7 +144,7 @@ sections:
         url: http://localhost:9091/transmission/web/
         target: newtab
         statusCheck: true
-        statusCheckAcceptCodes: "401"
+        statusCheckAcceptCodes: '401'
         id: 0_1154_transmission
   - name: Container Management
     icon: >-
@@ -159,7 +159,7 @@ sections:
       - title: Portainer
         description: Like a Web Based Docker Desktop
         icon: hl-portainer
-        url: https://localhost:49443/
+        url: https://portainer.localhost/
         target: newtab
         statusCheck: true
         statusCheckAllowInsecure: true

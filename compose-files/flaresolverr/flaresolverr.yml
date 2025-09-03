@@ -1,0 +1,15 @@
+services:
+  flaresolverr:
+    image: flaresolverr/flaresolverr
+    container_name: flaresolverr
+    ports:
+      - "8191:8191"
+    environment:
+      - TZ=${TIMEZONE} # Set the time zone (optional)
+    restart: unless-stopped
+    networks:
+      - homelab
+    profiles:
+      - all
+      - prowlarr
+      - flaresolverr

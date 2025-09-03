@@ -10,11 +10,11 @@ entryPoints:
         entryPoint:
           to: https
           scheme: https
-      middlewares: "crowdsec-bouncer@file"
+      # middlewares: "crowdsec-bouncer@file"
   https:
     address: ":443"
     http:
-      middlewares: "crowdsec-bouncer@file"
+      # middlewares: "crowdsec-bouncer@file"
 serversTransport:
   insecureSkipVerify: true
 providers:

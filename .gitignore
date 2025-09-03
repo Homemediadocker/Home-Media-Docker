@@ -1,5 +1,6 @@
 ## VS Code
 .history
+.vscode
 
 ## Local Env
 .containers
