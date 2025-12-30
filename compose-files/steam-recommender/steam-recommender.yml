@@ -7,13 +7,13 @@ services:
     ports:
       - "3030:80"
     restart: unless-stopped
-    container_name: ${STEAM_RECOMMENDER_CONTAINER_NAME:-steam-game-recommender}
+    container_name: steam-game-recommender
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${STEAM_RECOMMENDER_CONTAINER_NAME:-steam-game-recommender}.rule=Host(`${STEAM_RECOMMENDER_CONTAINER_NAME:-steam-game-recommender}.${PROJECT_HOSTNAME}`)"
-      - "traefik.http.routers.${STEAM_RECOMMENDER_CONTAINER_NAME:-steam-game-recommender}.entrypoints=https"
-      - "traefik.http.routers.${STEAM_RECOMMENDER_CONTAINER_NAME:-steam-game-recommender}.tls=true"
-      - "traefik.http.services.${STEAM_RECOMMENDER_CONTAINER_NAME:-steam-game-recommender}.loadbalancer.server.port=${80}"
+      - "traefik.http.routers.steam-game-recommender.rule=Host(`steam-game-recommender.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.steam-game-recommender.entrypoints=https"
+      - "traefik.http.routers.steam-game-recommender.tls=true"
+      - "traefik.http.services.steam-game-recommender.loadbalancer.server.port=80"
     environment:
       - STEAM_API_KEY=${STEAM_API_KEY}
       - STEAM_ID=${STEAM_ID}
