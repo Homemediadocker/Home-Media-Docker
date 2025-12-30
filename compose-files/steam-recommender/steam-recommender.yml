@@ -14,11 +14,14 @@ services:
       - "traefik.http.routers.steam-game-recommender.entrypoints=https"
       - "traefik.http.routers.steam-game-recommender.tls=true"
       - "traefik.http.services.steam-game-recommender.loadbalancer.server.port=80"
-    environment:
-      - STEAM_API_KEY=${STEAM_API_KEY}
-      - STEAM_ID=${STEAM_ID}
     profiles:
       - all
       - steam-recommender
     networks:
       - homelab
+    volumes:
+      - steam-data:/data
+
+volumes:
+  steam-data:
+    driver: local
