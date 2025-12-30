@@ -63,3 +63,6 @@ include:
 
   ######## PASSWORD MANAGER ###################
   - ./compose-files/vaultwarden/vaultwarden.yml
+
+  ######## STEAM RECOMMENDER ###################
+  - ./compose-files/steam-recommender/steam-recommender.yml

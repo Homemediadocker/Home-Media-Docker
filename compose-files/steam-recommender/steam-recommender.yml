@@ -11,3 +11,6 @@ services:
     environment:
       - STEAM_API_KEY=${STEAM_API_KEY}
       - STEAM_ID=${STEAM_ID}
+    profiles:
+      - all
+      - steam-recommender
