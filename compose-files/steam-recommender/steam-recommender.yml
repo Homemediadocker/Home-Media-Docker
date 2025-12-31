@@ -20,8 +20,4 @@ services:
     networks:
       - homelab
     volumes:
-      - steam-data:/data
-
-volumes:
-  steam-data:
-    driver: local
+      - ./data:/data
