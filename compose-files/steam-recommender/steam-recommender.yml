@@ -20,4 +20,4 @@ services:
     networks:
       - homelab
     volumes:
-      - ./data:/data
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/steam-recommender/data:/data
