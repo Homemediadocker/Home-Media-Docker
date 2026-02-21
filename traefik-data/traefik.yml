@@ -32,7 +32,7 @@ experimental:
 certificatesResolvers:
   netlify:
     acme:
-      email: quin.carter@gmail.com
+      email: example@example.com
       storage: acme.json
       # caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
@@ -45,7 +45,7 @@ certificatesResolvers:
           - "1.0.0.1:53"
   cloudflare:
     acme:
-      email: quin.carter@gmail.com
+      email: example@example.com
       storage: acme.json
       caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
       # caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
