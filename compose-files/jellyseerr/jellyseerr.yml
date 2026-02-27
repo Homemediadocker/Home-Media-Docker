@@ -1,7 +1,7 @@
 services:
   ### For managing server content requests
   jellyseerr:
-    image: fallenbagel/jellyseerr:latest
+    image: ghcr.io/seerr-team/seerr:latest
     container_name: ${JELLYSEERR_CONTAINER_NAME}
     env_file:
       - ./.env
@@ -10,6 +10,7 @@ services:
       - LOG_LEVEL=${JELLYSEER_LOG_LEVEL}
       - TZ=${TIMEZONE}
       - JELLYFIN_TYPE=${JELLYSEER_TYPE:-jellyfin} # default is jellyfin, but can do jellyfin|emby|plex
+      - OVERSEERR_CORS_ORIGIN=http://localhost:8081
     ports:
       - ${JELLYSEERR_HOST_PORT}:5055
     volumes:

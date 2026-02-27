@@ -16,12 +16,21 @@ services:
       - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads # optional but needed to map external data
     labels:
       - "traefik.enable=true"
+      # 1. The Main Router (Protected by Authentik)
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${SONARR_CONTAINER_NAME}.tls=true"
-      - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
-      ## Middlewares
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}.priority=10"
+      # This variable supplies the middleware for this specific router
       - ${SONARR_AUTHENTIK_MIDDLEWARE:-}
+
+      # 2. The API Bypass Router (Public/No Middleware)
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}-api.rule=Host(`${SONARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`) && PathPrefix(`/api/v3`)"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}-api.entrypoints=https"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}-api.tls=true"
+      - "traefik.http.routers.${SONARR_CONTAINER_NAME}-api.priority=100"
+
+      - "traefik.http.services.${SONARR_CONTAINER_NAME}.loadbalancer.server.port=${SONARR_HOST_PORT}"
     ports:
       - ${SONARR_HOST_PORT}:8989
       - ${SONARR_HOST_PORT_SSL}:9898 # ssl port if you enable it

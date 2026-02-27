@@ -14,16 +14,25 @@ services:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Radarr:/config
       - ${LOCAL_MOVIES_PATH}:/movies # optional but needed to map external data
       - ${LOCAL_DOWNLOADS_PATH:-./.local/downloads}:/downloads # optional but needed to map external data
-    ports:
-      - ${RADARR_HOST_PORT}:7878
     labels:
       - "traefik.enable=true"
+      # 1. The Main Router (Protected)
       - "traefik.http.routers.${RADARR_CONTAINER_NAME}.rule=Host(`${RADARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
       - "traefik.http.routers.${RADARR_CONTAINER_NAME}.entrypoints=https"
       - "traefik.http.routers.${RADARR_CONTAINER_NAME}.tls=true"
-      - "traefik.http.services.${RADARR_CONTAINER_NAME}.loadbalancer.server.port=7878"
-      ## Middlewares
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}.priority=10"
+      # This variable supplies the middleware for this specific router
       - ${RADARR_AUTHENTIK_MIDDLEWARE:-}
+
+      # 2. The API Bypass Router (Public)
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}-api.rule=Host(`${RADARR_CONTAINER_NAME}.${PROJECT_HOSTNAME}`) && PathPrefix(`/api/v3`)"
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}-api.entrypoints=https"
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}-api.tls=true"
+      - "traefik.http.routers.${RADARR_CONTAINER_NAME}-api.priority=100"
+
+      - "traefik.http.services.${RADARR_CONTAINER_NAME}.loadbalancer.server.port=7878"
+    ports:
+      - ${RADARR_HOST_PORT}:7878
     restart: unless-stopped
     networks:
       - homelab

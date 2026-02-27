@@ -1,3 +1,16 @@
 {
- 
+  "netlify": {
+    "Account": {
+      "Email": "example@example.com",
+      "Registration": {
+        "body": {
+          "status": "valid"
+        },
+        "uri": "https://acme-staging-v02.api.letsencrypt.org/acme/acct/242527823"
+      },
+      "PrivateKey": "asdfasdfoiwqelkas;dlgkajslgdhaposeithgapwohs;dlkga;slghaposighld;skgasjdflaksdfashdgkajsdhgaksdjhga=",
+      "KeyType": "4096"
+    },
+    "Certificates": null
+  }
 }
