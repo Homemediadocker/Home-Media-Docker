@@ -31,6 +31,7 @@ include:
   - ./compose-files/jellyfin/jellyfin.yml ## --profile jellyfin
   - ./compose-files/komga/komga.yml
   - ./compose-files/navidrome/navidrome.yml
+  - ./compose-files/tdarr/tdarr.yml
 
   ####### MEDIA MANAGEMENT ########
   - ./compose-files/jellyseerr/jellyseerr.yml

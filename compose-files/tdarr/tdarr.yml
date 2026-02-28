@@ -1,0 +1,108 @@
+services:
+  tdarr:
+    container_name: tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - ${TDARR_WEBUI_PORT:-8265}:8265 # webUI port
+      - ${TDARR_SERVER_PORT:-8266}:8266 # server port
+    env_file:
+      - ../../.env
+      - ./.env
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK_SET=${UMASK_SET:-0022}
+      - serverIP=${TDARR_SERVER_IP:-127.0.0.1}
+      - serverPort=${TDARR_SERVER_PORT:-8266}
+      - webUIPort=${TDARR_WEBUI_PORT:-8265}
+      - internalNode=${TDARR_INTERNAL_NODE:-false}
+      - inContainer=${TDARR_IN_CONTAINER:-false}
+      - ffmpegVersion=${TDARR_FFMPEG_VERSION}
+      - nodeName=${TDARR_NODE_NAME:-tdarr}
+      - nodeType=${TDARR_NODE_TYPE}
+      - priority=${TDARR_PRIORITY}
+      - apiKey=${TDARR_API_KEY}
+      - auth=${TDARR_AUTH:-false}
+      - authType=${TDARR_AUTH_TYPE:-}
+      - openBrowser=${TDARR_OPEN_BROWSER:-false}
+      - startPaused=${TDARR_START_PAUSED:-false}
+      - transcodegpuWorkers=${TDARR_TRANSCODE_GPU_WORKERS:-1}
+      - transcodecpuWorkers=${TDARR_TRANSCODE_CPU_WORKERS:-1}
+      - healthcheckgpuWorkers=${TDARR_HEALTHCHECK_GPU_WORKERS:-1}
+      - healthcheckcpuWorkers=${TDARR_HEALTHCHECK_CPU_WORKERS:-1}
+      - maxLogSizeMB=${TDARR_MAX_LOG_SIZE_MB}
+      - cronPluginUpdate=${TDARR_CRON_PLUGIN_UPDATE}
+      - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr/server:/app/server
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr/configs:/app/configs
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr/logs:/app/logs
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr/transcode-cache:/temp
+      - ${LOCAL_TV_PATH}:/media/Synology/Television # Media directory
+      - ${LOCAL_MOVIES_PATH}:/media/Synology/Movies # Media directory
+    devices:
+      - /dev/dri:/dev/dri
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    profiles:
+      - all
+      - tdarr
+
+  # node example
+  tdarr-node:
+    container_name: tdarr-node
+    image: ghcr.io/haveagitgat/tdarr_node:latest
+    restart: unless-stopped
+    network_mode: service:tdarr
+    env_file:
+      - ../../.env
+      - ./.env
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK_SET=${UMASK_SET}
+      - nodeName=${TDARR_NODE_NAME_NODE}
+      - serverIP=${TDARR_SERVER_IP}
+      - serverPort=${TDARR_SERVER_PORT}
+      - inContainer=${TDARR_IN_CONTAINER}
+      - ffmpegVersion=${TDARR_FFMPEG_VERSION}
+      - nodeType=${TDARR_NODE_TYPE}
+      - priority=${TDARR_PRIORITY}
+      - cronPluginUpdate=${TDARR_CRON_PLUGIN_UPDATE}
+      - apiKey=${TDARR_API_KEY}
+      - maxLogSizeMB=${TDARR_MAX_LOG_SIZE_MB}
+      - pollInterval=${TDARR_POLL_INTERVAL}
+      - startPaused=${TDARR_START_PAUSED}
+      - transcodegpuWorkers=${TDARR_TRANSCODE_GPU_WORKERS}
+      - transcodecpuWorkers=${TDARR_TRANSCODE_CPU_WORKERS}
+      - healthcheckgpuWorkers=${TDARR_HEALTHCHECK_GPU_WORKERS}
+      - healthcheckcpuWorkers=${TDARR_HEALTHCHECK_CPU_WORKERS}
+      - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
+    volumes:
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr-node:/app/configs
+      - /docker/tdarr/logs:/app/logs
+      - /media:/media
+      - /transcode_cache:/temp
+    devices:
+      - /dev/dri:/dev/dri
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    profiles:
+      - all
+      - tdarr
