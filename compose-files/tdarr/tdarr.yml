@@ -45,6 +45,23 @@ services:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr/transcode-cache:/temp
       - ${LOCAL_TV_PATH}:/media/Synology/Television # Media directory
       - ${LOCAL_MOVIES_PATH}:/media/Synology/Movies # Media directory
+    labels:
+      - "traefik.enable=true"
+      # 1. The Main Router (Protected)
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}.rule=Host(`tdarr.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}.tls=true"
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}.priority=10"
+      # This variable supplies the middleware for this specific router
+      - ${TDARR_AUTHENTIK_MIDDLEWARE:-}
+
+      # 2. The API Bypass Router (Public)
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}-api.rule=Host(`tdarr.${PROJECT_HOSTNAME}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}-api.entrypoints=https"
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}-api.tls=true"
+      - "traefik.http.routers.${TDARR_CONTAINER_NAME}-api.priority=100"
+
+      - "traefik.http.services.${TDARR_CONTAINER_NAME}.loadbalancer.server.port=${TDARR_WEBUI_PORT:-8265}"
     devices:
       - /dev/dri:/dev/dri
     # deploy:
