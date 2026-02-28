@@ -35,8 +35,9 @@ services:
       - healthcheckcpuWorkers=${TDARR_HEALTHCHECK_CPU_WORKERS:-1}
       - maxLogSizeMB=${TDARR_MAX_LOG_SIZE_MB}
       - cronPluginUpdate=${TDARR_CRON_PLUGIN_UPDATE}
-      - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
-      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
+      - TDARR_TRANSCODE_GPU_TYPE=vaapi
+      # - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
+      # - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr/server:/app/server
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr/configs:/app/configs
@@ -46,13 +47,13 @@ services:
       - ${LOCAL_MOVIES_PATH}:/media/Synology/Movies # Media directory
     devices:
       - /dev/dri:/dev/dri
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
     profiles:
       - all
       - tdarr
@@ -87,8 +88,9 @@ services:
       - transcodecpuWorkers=${TDARR_TRANSCODE_CPU_WORKERS}
       - healthcheckgpuWorkers=${TDARR_HEALTHCHECK_GPU_WORKERS}
       - healthcheckcpuWorkers=${TDARR_HEALTHCHECK_CPU_WORKERS}
-      - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
-      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
+      - TDARR_TRANSCODE_GPU_TYPE=vaapi
+      # - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
+      # - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Tdarr/tdarr-node:/app/configs
       - /docker/tdarr/logs:/app/logs
@@ -96,13 +98,13 @@ services:
       - /transcode_cache:/temp
     devices:
       - /dev/dri:/dev/dri
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
     profiles:
       - all
       - tdarr
