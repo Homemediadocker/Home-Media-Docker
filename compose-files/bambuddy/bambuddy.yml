@@ -147,6 +147,9 @@ services:
       # You also need to mount your certificates to the container (see volumes section above).
       # - USE_SYSTEM_TRUST_STORE=true
     restart: unless-stopped
+    env_file:
+      - ./.env
+      - ../../.env
     profiles:
       - all
       - bambuddy
