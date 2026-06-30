@@ -60,8 +60,8 @@ services:
     # forgo discovery (add printers by IP) can stay on bridge with the
     # narrowed range above.
     volumes:
-      - bambuddy_data:/app/data
-      - bambuddy_logs:/app/logs
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bambuddy/data:/app/data
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/Bambuddy/logs:/app/logs
       #
       # OPTIONAL — only needed if you ALSO run a native install of Bambuddy
       # on the same host and want both installs to share the same Virtual
