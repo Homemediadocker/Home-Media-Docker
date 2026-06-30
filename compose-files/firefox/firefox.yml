@@ -15,8 +15,8 @@ services:
     volumes:
       - ${DEFAULT_CONTAINER_DATA_LOCATION}/Firefox:/config
     ports:
-      - 3000:3000
-      - 3001:3001
+      - 30000:3000
+      - 30010:3001
     shm_size: "1gb"
     restart: unless-stopped
     profiles:
