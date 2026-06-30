@@ -21,6 +21,23 @@ services:
     #
     # LINUX: Use host mode for printer discovery and camera streaming
     network_mode: host
+    labels:
+      - "traefik.enable=true"
+      # 1. The Main Router (Protected by Authentik)
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}.rule=Host(`${BAMBUDDY_CONTAINER_NAME:-bambuddy}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}.entrypoints=https"
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}.tls=true"
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}.priority=10"
+      # This variable supplies the middleware for this specific router
+      - ${BAMBUDDY_AUTHENTIK_MIDDLEWARE:-}
+
+      # 2. The API Bypass Router (Public/No Middleware)
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}-api.rule=Host(`${BAMBUDDY_CONTAINER_NAME:-bambuddy}.${PROJECT_HOSTNAME}`) && PathPrefix(`/api/v3`)"
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}-api.entrypoints=https"
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}-api.tls=true"
+      - "traefik.http.routers.${BAMBUDDY_CONTAINER_NAME:-bambuddy}-api.priority=100"
+
+      - "traefik.http.services.${BAMBUDDY_CONTAINER_NAME:-bambuddy}.loadbalancer.server.port=${BAMBUDDY_HOST_PORT:-8000}"
     #
     # macOS/WINDOWS: Docker Desktop doesn't support host mode.
     # Comment out "network_mode: host" above and uncomment "ports:" below.
