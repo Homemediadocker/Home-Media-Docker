@@ -20,7 +20,7 @@ services:
       - NET_BIND_SERVICE
     #
     # LINUX: Use host mode for printer discovery and camera streaming
-    network_mode: host
+    # network_mode: host
     labels:
       - "traefik.enable=true"
       # 1. The Main Router (Protected by Authentik)
@@ -42,16 +42,16 @@ services:
     # macOS/WINDOWS: Docker Desktop doesn't support host mode.
     # Comment out "network_mode: host" above and uncomment "ports:" below.
     # Note: Printer discovery won't work - add printers manually by IP.
-    #ports:
-    #  - "${PORT:-8000}:8000"
-    #  - "3000:3000"                  # Virtual printer bind/detect
-    #  - "3002:3002"                  # Virtual printer bind/detect
-    #  - "8883:8883"                  # Virtual printer MQTT
-    #  - "990:990"                    # Virtual printer FTP control
-    #  - "6000:6000"                  # Virtual printer file transfer tunnel
-    #  - "322:322"                    # Virtual printer RTSP camera (X1/H2/P2; proxy mode + non-proxy modes with a target printer)
-    #  - "2024-2026:2024-2026"        # Virtual printer proprietary ports (A1/P1S)
-    #  - "50000-50029:50000-50029"    # Virtual printer FTP passive data (3 VPs × 10-port slice)
+    ports:
+      - "${PORT:-8000}:8000"
+      - "3000:3000"                  # Virtual printer bind/detect
+      - "3002:3002"                  # Virtual printer bind/detect
+      - "8883:8883"                  # Virtual printer MQTT
+      - "990:990"                    # Virtual printer FTP control
+      - "6000:6000"                  # Virtual printer file transfer tunnel
+      - "322:322"                    # Virtual printer RTSP camera (X1/H2/P2; proxy mode + non-proxy modes with a target printer)
+      - "2024-2026:2024-2026"        # Virtual printer proprietary ports (A1/P1S)
+      - "50000-50029:50000-50029"    # Virtual printer FTP passive data (3 VPs × 10-port slice)
     #
     # FTP passive-mode port slicing (#1646): non-proxy VPs (Archive / Review /
     # Queue modes) get a 10-port slice each, allocated by VP id — VP 1 →
