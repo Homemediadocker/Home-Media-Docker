@@ -56,6 +56,7 @@ include:
 
   ######### OTHER HOME CONTAINERS ###############
   - ./compose-files/homebox/homebox.yml
+  - ./compose-files/bambuddy/bambuddy.yml
 
   ######## FAMILY STUFF ###################
   - ./compose-files/mealie/mealie.yml
