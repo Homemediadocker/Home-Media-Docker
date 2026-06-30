@@ -21,6 +21,8 @@ services:
     #
     # LINUX: Use host mode for printer discovery and camera streaming
     # network_mode: host
+    networks:
+      - homelab
     labels:
       - "traefik.enable=true"
       # 1. The Main Router (Protected by Authentik)
