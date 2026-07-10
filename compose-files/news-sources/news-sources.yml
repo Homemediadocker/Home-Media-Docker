@@ -64,7 +64,7 @@ services:
       - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}.tls=true"
       - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}.priority=10"
       # This variable supplies the middleware for this specific router
-      - ${SONARR_AUTHENTIK_MIDDLEWARE:-}
+      - ${NEWS_AUTHENTIK_MIDDLEWARE:-}
 
       # 2. The API Bypass Router (Public/No Middleware)
       - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}-api.rule=Host(`${NEWS_FRONTEND_CONTAINER_NAME}.${PROJECT_HOSTNAME}`) && PathPrefix(`/api/v3`)"
