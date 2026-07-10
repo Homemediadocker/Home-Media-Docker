@@ -72,7 +72,7 @@ services:
       - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}-api.tls=true"
       - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}-api.priority=100"
 
-      - "traefik.http.services.${NEWS_FRONTEND_CONTAINER_NAME}.loadbalancer.server.port=${NEWS_FRONTEND_PORT}"
+      - "traefik.http.services.${NEWS_FRONTEND_CONTAINER_NAME}.loadbalancer.server.port=80"
     depends_on:
       - backend
     restart: unless-stopped
