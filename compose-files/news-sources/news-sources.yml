@@ -2,6 +2,9 @@ services:
   db:
     image: postgres:16-alpine
     container_name: news-db
+    env_file:
+      - ./.env
+      - ../../.env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -9,7 +12,7 @@ services:
     ports:
       - "${DB_PORT}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ${DEFAULT_CONTAINER_DATA_LOCATION}/NewsSources/pgdata:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -28,6 +31,9 @@ services:
     container_name: news-backend
     ports:
       - "${BACKEND_PORT}:3000"
+    env_file:
+      - ./.env
+      - ../../.env
     environment:
       PORT: 3000
       DATABASE_URL: ${DATABASE_URL}
@@ -45,7 +51,7 @@ services:
   frontend:
     image: lquincarter/news-sources-frontend:0.0.1
     container_name: ${NEWS_FRONTEND_CONTAINER_NAME}
-    env: 
+    env_file: 
       - ./.env
       - ../../.env
     ports:
@@ -76,7 +82,3 @@ services:
     networks:
       - homelab
       - news
-
-volumes:
-  pgdata:
-    driver: local
