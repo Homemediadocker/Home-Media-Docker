@@ -68,3 +68,4 @@ include:
 
   ######## STEAM RECOMMENDER ###################
   - ./compose-files/steam-recommender/steam-recommender.yml
+  - ./compose-files/news-sources/news-sources.yml

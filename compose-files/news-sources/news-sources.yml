@@ -1,0 +1,82 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: news-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    profiles:
+      - all
+      - news
+    networks:
+      - news
+
+  backend:
+    image: lquincarter/news-sources-backend:0.0.1
+    container_name: news-backend
+    ports:
+      - "${BACKEND_PORT}:3000"
+    environment:
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    profiles:
+      - all
+      - news
+    networks:
+      - homelab
+      - news
+
+  frontend:
+    image: lquincarter/news-sources-frontend:0.0.1
+    container_name: ${NEWS_FRONTEND_CONTAINER_NAME}
+    env: 
+      - ./.env
+      - ../../.env
+    ports:
+      - "${NEWS_FRONTEND_PORT}:80"
+    labels:
+      - "traefik.enable=true"
+      # 1. The Main Router (Protected by Authentik)
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}.rule=Host(`${NEWS_FRONTEND_CONTAINER_NAME}.${PROJECT_HOSTNAME}`)"
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}.tls=true"
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}.priority=10"
+      # This variable supplies the middleware for this specific router
+      - ${SONARR_AUTHENTIK_MIDDLEWARE:-}
+
+      # 2. The API Bypass Router (Public/No Middleware)
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}-api.rule=Host(`${NEWS_FRONTEND_CONTAINER_NAME}.${PROJECT_HOSTNAME}`) && PathPrefix(`/api/v3`)"
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}-api.entrypoints=https"
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}-api.tls=true"
+      - "traefik.http.routers.${NEWS_FRONTEND_CONTAINER_NAME}-api.priority=100"
+
+      - "traefik.http.services.${NEWS_FRONTEND_CONTAINER_NAME}.loadbalancer.server.port=${NEWS_FRONTEND_PORT}"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    profiles:
+      - all
+      - news
+    networks:
+      - homelab
+      - news
+
+volumes:
+  pgdata:
+    driver: local
